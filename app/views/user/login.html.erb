@@ -1,0 +1,185 @@
+
+<style>
+.subnav  {
+  display: none !important;
+}
+
+.front-card {
+  height: 328px;
+  margin: -154px 0px 0px -418px;
+  top: 150px;
+  width: 838px;
+  left: 50%;
+  position: relative;
+  color: #333333;
+  vertical-align: baseline;
+  padding: 0px;
+  font: inherit;
+}
+
+.front-random-image-city-balcony .front-welcome {
+  border-radius: 6px 6px 6px 6px;
+}
+
+.front-welcome {
+  display: table;                                                               
+  width: 837px;                                                                 
+  height: 380px;                                                                
+  margin: 0px auto;                                                             
+  vertical-align: baseline;                                                     
+  top: 10px;
+}
+
+body { 
+  background: url('/assets/login.jpg') no-repeat center center fixed transparent;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+} 
+
+.front-signin {
+  height: 118px;
+  left: 565px;
+  position: absolute;
+  top: 25px;
+  width: 233px;
+  border: 1px;
+  border-style: solid;
+  border-radius: 14px 14px 14px 14px;
+  background-color: transparent; /* D5D5D5;*/
+  border-color: #D5D5D5;
+}
+
+/*
+.front-signin .username {
+  left: 12px;
+  position: absolute;
+  top: 12px;
+  width: 276px;
+}
+*/
+
+
+.front-signin .placeholding-input {
+  height: 30px;
+}
+
+.signin .password, .signin .username {
+  font-size: 13px;
+  width: 150px;
+}
+
+
+.username, .time, .time a, .metadata, .metadata a {
+  color: #999999;
+}
+
+
+/*
+.front-signin .username .text-input {
+ width: 266px;
+}
+
+.front-card .text-input {
+  height: 20px;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0 1px 0 #EEEEEE inset, 0 1px 0 #FFFFFF; 
+}
+*/
+
+
+
+
+
+
+
+
+.placeholding-input input {
+  top: 0px;
+  position: absolute;
+}
+
+input, textarea {
+  -moz-transition: background 0.2s linear 0s;
+}
+
+input, textarea, select {
+  background-color: #FFFFFF;
+  border-radius: 3px 3px 3px 3px;
+  display: inline-block;
+  margin: 0px;
+  outline: medium none;
+  padding: 4px;
+}
+
+label, input, textarea, select, button {
+  font: 13px/20px "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#user_password {
+  width: 65%;
+  height: auto;
+  margin-left: 12px;
+}
+
+#user_username {
+  height: auto;
+  margin-left: 12px;
+}
+
+.signup_btn {
+  background-repeat: repeat-x;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+}
+</style>
+
+
+
+
+
+<div class="row-fluid">
+  
+    <div class="front-card">
+        
+      <% if flash[:error] %>                                                     
+        <font id="flash" style="color:red;"><%= flash[:error] %></font>            
+      <% end %>                                         
+    
+
+      <div class="front-welcome">
+        <div class="front-welcome-text">
+          <h1 style="margin-left:10px;top:50px;position:absolute;color: white;">Welcome to LIMS reports.</h1>
+          <p style="top:90px;margin-left:10px;position:absolute;color:white;width:350px;">
+          View reports and also query previous results.</p>
+        </div>
+      </div>
+
+      <div class="front-signin js-front-signin">
+       <form action="/users/login" method="post" id="customer">
+       <table class="flex-table password-signin">
+        <tbody>
+          <tr>
+            <td><%=text_field(:user, :username, :textCase => "lower",:placeholder => "username") %> </td>
+          </tr>
+          <tr>
+            <td><%=password_field(:user, :password, :textCase => "lower",:placeholder => "password") %>
+            <input type ="submit" class="btn" value="Login" /></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td style="float:right;position:absolute;right:10px;">
+              <a class="btn signup_btn" href="/users/signup">Sign up for LIMS</a>
+            </td>
+          </tr>
+        </tbody> 
+       </table> 
+       </form>
+      </div>
+    </div>
+  </div>
+</div>
