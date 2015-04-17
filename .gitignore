@@ -1,10 +1,7 @@
 .DS_Store
 *.swp
+config/*.yml
 *.swo
-config/database.yml
-config/email.yml
-config/application.yml
-config/settings.yml
 notes
 schema.rb
 *~
