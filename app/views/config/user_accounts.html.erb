@@ -1,0 +1,419 @@
+<style>
+  .even td {
+      border: 1px solid #ccc;
+      color: #1f3b5e;
+      background-color: #cfe4cd;
+      padding: 2px;
+      vertical-align: middle;
+  }
+
+  .odd td {
+      border: 1px solid #ccc;
+      color: #1f3b5e;
+      padding: 2px;
+      vertical-align: middle;
+  }
+
+  th {
+      border: 1px dotted #ccc !important;
+  }
+
+  .action  {
+      background-color: white !important;
+      border: none !important;
+  }
+
+  .btn{
+      opacity: 0.76 !important;
+  }
+
+  .uni{
+      min-width: 70px;
+  }
+
+  #shield{
+      position: absolute;
+      z-index: 2000;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100vh;
+      background: gray;
+      opacity: 0.3;
+      display: none;
+  }
+
+  #popup{
+      position: absolute;
+      z-index: 2001;
+      left: 28%;
+      width: 40%;
+      top: 3%;
+      height: 90% !important;
+      max-height: 90% !important;
+      background-color: whitesmoke;
+      border: 1.5px solid darkslategray;
+      border-radius: 8px;
+      opacity: 1 !important;
+      display: none;
+  }
+
+  #popup-header{
+      background-color: whitesmoke;
+      height: 5%;
+      font-size: 120%;
+  }
+  #popup-content{
+      height: 90%;
+      max-height: 90%;
+      background: white;
+      padding:0px;
+  }
+  #popup-footer{
+      height: 5%;
+      background-color: whitesmoke;
+      border-top: 1px solid lightgray;
+  }
+  #content-holder{
+      padding-top: 10px;
+      width: 100%;
+      height: 95%;
+      overflow: auto;
+  }
+  #table-content{
+      margin-top: 5px;
+      padding-top:5px;
+      width: 100%
+  }
+  .row_even, .row_odd{
+      width: 100% !important;
+  }
+  .labell, .value{
+      height: 35px;
+      width: 50% !important;
+      vertical-align: middle !important;
+      padding-top: 8px !important;
+  }
+  .labell {
+      font-size: 1em;
+      font-weight: bold;
+  }
+</style>
+<div id="shield">
+</div>
+<div id = "popup">
+  <table style="width:100%;height:100%;">
+    <tr>
+        <th id="popup-header">
+         Header
+        </th>
+    </tr>
+    <tr>
+        <td id="popup-content">
+        </td>
+    </tr>
+    <tr>
+      <td id="popup-footer">
+        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" href="">Save</a>
+        <a style="width:12%" class="btn btn-danger pull-left" href="javascript:cancel();">Cancel</a>
+      </td>
+    </tr>
+   </table>
+
+</div>
+<div class="panel" style='width:85%;'>
+  <p style="text-align: right;">
+    <a href="" rel="facebox">Page Help</a>
+  </p>
+
+ <table style="width: 100%;"><tr>
+   <td style="width:85%;">
+          <a class="btn btn-primary" type='button warning' href="">
+            Add New Account
+          </a>
+   </td>
+   <td >
+            <input id='text' type="text" value="<%= params[:search_string]%>" class="form-control" placeholder="Search for...">
+   </td>
+   <td style="padding-bottom: 10px;">
+             <button onclick="search()" class="btn btn-default" type="button">Go!</button>
+   </td>
+ </tr></table>
+
+<table class='table table-striped table-hover' style='width:100%;'>
+  <thead>
+      <tr valign='top'>
+        <th>
+          #
+        </th>
+        <th>
+           Username
+        </th>
+
+        <th>
+          Actual Name
+        </th>
+
+        <th>
+           User Type
+        </th>
+        <th>
+           Action
+        </th>
+      </tr>
+
+  <% search_string = params[:search_string] || ""
+
+     @users.delete_if{|u|
+        !u.to_s.match(/#{search_string}/i)
+     }
+
+     (@users || []).each_with_index do |user, i|%>
+
+      <tr id="<%= user['userId']%>" valign='top' class="<%= cycle('even', 'odd')%>">
+        <td>
+          <%= i + 1%>
+        </td>
+        <td style="width: 22%">
+          <%= user['username']%>
+        </td>
+
+        <td style="width: 22%">
+          <%= user['actualName']%>
+        </td>
+
+        <td style="width: 22%">
+          <%= (user['level'] == '2') ? "Lab Manager" : ((user['level'] == '5') ? "Lab Receptionist" : "Lab Technician")%>
+        </td>
+        <td class="action">
+          <div>
+              <a class="btn btn-success uni" type='button' href="javascript:viewUser(<%= user['userId']%>, '<%= user['username']%>')">
+                View Details
+              </a>
+
+              <a class="btn btn-warning uni" type='button' href="javascript:editUser(<%= user['userId']%>, '<%= user['username']%>')">
+                Edit Details
+              </a>
+            <% if user['activeStatus'] == '1' %>
+              <a class="btn btn-danger uni" type='button' href="javascript:deactivate(<%= user['userId']%>)">
+                Deactivate
+              </a>
+            <% else %>
+                <a class="btn btn-danger uni" type='button' style='opacity: 0.3 !important;' href="javascript:deactivate(<%= user['userId']%>)">
+                  Activate a/c
+                </a>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+  <% end %>
+</table>
+</div>
+
+<script>
+
+    var users = {}
+
+    <%
+    keys =  @users[0].keys if  !@users.blank?
+    @users.each do |usr|
+        id = usr['userId']
+     %>
+
+     users[<%= id%>] = {};
+
+    <%
+        keys.each do |ky|
+    %>
+         users[<%= id%>]["<%= ky%>"] = "<%= usr[ky]%>"
+    <%
+        end
+     end %>
+
+    var sections = {}
+
+    <%
+    keys =  @lab_sections[0].keys if  !@lab_sections.blank?
+    @lab_sections.each do |sec|
+        id = sec['test_category_id']
+     %>
+
+    sections[<%= id%>] = {};
+
+    <%
+        keys.each do |ky|
+    %>
+    sections[<%= id%>]["<%= ky%>"] = "<%= sec[ky]%>"
+    <%
+        end
+     end %>
+
+
+    function __$(id){
+        return document.getElementById(id);
+    }
+    function  cancel(){
+        hidePopup();
+    }
+    function display(headerTitle, showSave){
+
+        __$("shield").style.display = "table-cell";
+        __$("popup").style.display = "table-cell";
+        __$("popup-header").innerHTML = headerTitle;
+
+        if (showSave == true){
+            __$("btn-save").style.display = "block";
+        }else{
+            __$("btn-save").style.display = "none";
+        }
+    }
+    function hidePopup(){
+
+        __$("shield").style.display = "none";
+        __$("popup").style.display = "none";
+        __$("popup-header").innerHTML = "";
+        __$("popup-content").innerHTML = "";
+    }
+
+    function viewUser(userId, username){
+
+        buildViewContent(userId);
+        var heada = "View User - " + username;
+        display(heada, false);
+    }
+
+    function editUser(userId, username){
+
+        buildEditContent(userId);
+        var heada = "Edit User - " + username;
+        display(heada, true);
+    }
+
+    function deactivate(){
+
+    }
+
+    function buildEditContent(userId){
+
+        var div = document.createElement("div");
+        div.id = "content-holder";
+        div.className = "table-responsive";
+
+        var table = document.createElement("table");
+        table.id = "table-content";
+        table.vAlign = 'top';
+        table.className = "table"
+
+        var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
+        var displayFields = ['Username', 'Actual Name', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
+        var controlType = ['text', 'text', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
+
+        for(var i = 0; i < requiredFields.length; i++){
+
+            var row = document.createElement("tr");
+            row.id = requiredFields[i];
+            row.className = " table-row row_" + ((i%2 == 0) ? 'even' : 'odd');
+            row.style.display = "table-row";
+            table.appendChild(row);
+
+            var cell1 = document.createElement("td");
+            cell1.className = "labell";
+            cell1.style.display = "table-cell";
+            cell1.innerHTML = displayFields[i] + "<span class='pull-right'>:</span>";
+            row.appendChild(cell1);
+
+            var cell2 = document.createElement("td");
+            cell2.className = "value";
+            cell2.style.display = "table-cell";
+
+            var value = users[userId][requiredFields[i]];
+            if (requiredFields[i] == 'canverify'){
+                value = value == 0 ? "No" : "Yes";
+            }else if(requiredFields[i] == 'level'){
+                value = (value == 2) ? "Lab Manager" : ((value == 5) ? "Lab Receptionist" : "Lab Technician")
+            }else if (requiredFields[i] == 'labSection'){
+                var ids = value.split(",");
+                value = "<ol>";
+                for(var j = 0; j < ids.length; j ++){
+                    try {
+                        value += "<li>" + sections[ids[j]]['name'] + "</li>";
+                    }catch(e){}
+                }
+                value += "</ol>";
+
+            }
+
+            if (controlType[i] == 'text') {
+                cell2.innerHTML = "<input id='text' type='text' class='form-control' placeholder=" + value + ">"
+            }else{
+                cell2.innerHTML = value;
+            }
+
+            row.appendChild(cell2);
+        }
+
+        div.appendChild(table);
+        __$("popup-content").appendChild(div);
+    }
+
+    function buildViewContent(userId){
+
+        var div = document.createElement("div");
+        div.id = "content-holder";
+        div.className = "table-responsive";
+
+        var table = document.createElement("table");
+        table.id = "table-content";
+        table.vAlign = 'top';
+        table.className = "table"
+
+        var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
+        var displayFields = ['Username', 'Actual Name', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
+
+        for(var i = 0; i < requiredFields.length; i++){
+
+            var row = document.createElement("tr");
+            row.id = requiredFields[i];
+            row.className = " table-row row_" + ((i%2 == 0) ? 'even' : 'odd');
+            row.style.display = "table-row";
+            table.appendChild(row);
+
+            var cell1 = document.createElement("td");
+            cell1.className = "labell";
+            cell1.style.display = "table-cell";
+            cell1.innerHTML = displayFields[i] + "<span class='pull-right'>:</span>";
+            row.appendChild(cell1);
+
+            var cell2 = document.createElement("td");
+            cell2.className = "value";
+            cell2.style.display = "table-cell";
+
+            var value = users[userId][requiredFields[i]];
+            if (requiredFields[i] == 'canverify'){
+                value = value == 0 ? "No" : "Yes";
+            }else if(requiredFields[i] == 'level'){
+                value = (value == 2) ? "Lab Manager" : ((value == 5) ? "Lab Receptionist" : "Lab Technician")
+            }else if (requiredFields[i] == 'labSection'){
+                var ids = value.split(",");
+                value = "<ol>";
+                for(var j = 0; j < ids.length; j ++){
+                    try {
+                        value += "<li>" + sections[ids[j]]['name'] + "</li>";
+                    }catch(e){}
+                }
+                value += "</ol>";
+
+            }
+
+            cell2.innerHTML = value;
+            row.appendChild(cell2);
+        }
+
+        div.appendChild(table);
+        __$("popup-content").appendChild(div);
+    }
+
+    function search(){
+            window.location = '/config/user_accounts?title=User Accounts&search_string=' + __$('text').value;
+    }
+</script>

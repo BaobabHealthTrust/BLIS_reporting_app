@@ -1,6 +1,6 @@
 module ApplicationHelper
   def app_name
-    'LIMS reports'
+    'LIMS'
   end
 
   def organization_name
