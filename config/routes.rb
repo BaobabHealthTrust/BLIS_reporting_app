@@ -1,7 +1,21 @@
 Rails.application.routes.draw do
-  get 'user/login'
 
-  get 'home/index'
+  ###### login ############################
+  get 'login' => 'user#login'
+  post 'authenticate' => 'user#authenticate'
+  ###### login end ###########################
+
+  ###### home ###########################
+  #match "home/index" => "home#index", as: :home, via: [:get, :post]
+  ###### home end ###########################
+
+  ###### report ###########################
+  #match "home/index" => "home#index", as: :home, via: [:get, :post]
+  get 'reports' => 'report#index'
+  ###### reports end ###########################
+
+
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -57,5 +71,5 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  root :to => 'home#index'
+  root 'home#index'
 end
