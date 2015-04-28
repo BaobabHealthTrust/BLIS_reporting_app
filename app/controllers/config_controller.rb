@@ -1,8 +1,7 @@
 class ConfigController < ApplicationController
 
   def index
-
-    render :layout => 'config'
+   
   end
 
   def user_accounts
@@ -18,7 +17,13 @@ class ConfigController < ApplicationController
 
     @lab_sections = []
     @lab_sections = JSON.parse(data_ls) if !data_ls.blank?
+  end
 
-    render :layout => 'config'
+  def post_data
+    @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["user_create_or_edit_link"]}"
+
+    response = RestClient.post(@post_url, params)
+
+    render :text => response
   end
 end

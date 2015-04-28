@@ -31,6 +31,9 @@ gem 'ruby-hl7', '1.1.0'
 gem 'mysql', '2.9.1'
 gem 'rest-client', '1.7.2'
 gem 'passenger', '5.0.5'
+gem 'activerecord-session_store', '0.1.1'
+#gem 'strong_parameters'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

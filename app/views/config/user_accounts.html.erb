@@ -77,7 +77,7 @@
   #content-holder{
       padding-top: 10px;
       width: 100%;
-      height: 95%;
+      height: 100%;
       overflow: auto;
   }
   #table-content{
@@ -97,6 +97,14 @@
   .labell {
       font-size: 1em;
       font-weight: bold;
+      border-right: 1px dotted lightgray !Important;
+  }
+  ul {
+      list-style-type: none;
+  }
+  .checkbox input {
+      padding-top: 0px !important;
+      background: lightblue !important;
   }
 </style>
 <div id="shield">
@@ -114,21 +122,22 @@
     </tr>
     <tr>
       <td id="popup-footer">
-        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" href="">Save</a>
+        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" >Save</a>
         <a style="width:12%" class="btn btn-danger pull-left" href="javascript:cancel();">Cancel</a>
       </td>
     </tr>
    </table>
 
 </div>
-<div class="panel" style='width:85%;'>
+<div id="mainPage" class="page" style='width:85%;'>
+  <h3> <%= params[:title]%> </h3>
   <p style="text-align: right;">
     <a href="" rel="facebox">Page Help</a>
   </p>
 
  <table style="width: 100%;"><tr>
    <td style="width:85%;">
-          <a class="btn btn-primary" type='button warning' href="">
+          <a class="btn btn-primary" type='button warning' href="javascript:editUser(-1, '')">
             Add New Account
           </a>
    </td>
@@ -212,24 +221,6 @@
 
 <script>
 
-    var users = {}
-
-    <%
-    keys =  @users[0].keys if  !@users.blank?
-    @users.each do |usr|
-        id = usr['userId']
-     %>
-
-     users[<%= id%>] = {};
-
-    <%
-        keys.each do |ky|
-    %>
-         users[<%= id%>]["<%= ky%>"] = "<%= usr[ky]%>"
-    <%
-        end
-     end %>
-
     var sections = {}
 
     <%
@@ -247,6 +238,70 @@
     <%
         end
      end %>
+
+
+    var users = {}
+
+    //Initialising defaults used for creating a new user
+    users[-1] = {}
+    users[-1]['typeSelect'] = "<select id='level' class='form-control'><option value='2' >" +
+            "Lab Manager</option><option value='5'  >" +
+            "Lab Receptionist</option><option value='13' selected >" +
+            "Lab Technician</option></select>"
+
+
+    users[-1]["selectLabSections"] = "<ul style='height: 100px; overflow-y: auto'>";
+    <%
+    @lab_sections.each do |sec|
+    %>
+    users[-1]["selectLabSections"] += "<div class = 'checkbox' ><label> <input class = 'lab-section-checkbox' value=<%= sec['test_category_id'].to_i%> type = 'checkbox'> " +
+            "<%= sec['name']%></label></div>";
+    <% end %>
+    users[-1]["selectLabSections"] += "</ul>";
+
+    //End of defaults Init
+
+    <%
+    keys =  @users[0].keys if  !@users.blank?
+    @users.each do |usr|
+        id = usr['userId']
+     %>
+
+     users[<%= id%>] = {};
+
+
+    <%
+        keys.each do |ky|
+    %>
+         users[<%= id%>]["<%= ky%>"] = "<%= usr[ky]%>"
+    <%
+        end
+        level = usr['level'].to_i
+    %>
+        users[<%= id%>]["typeSelect"] = "<select id='level' class='form-control'><option value='2' <%= (level== 2)  ? "selected" : ""%>>" +
+                "Lab Manager</option><option value='5'  <%= (level== 5)  ? "selected" : ""%>>" +
+                "Lab Receptionist</option><option value='13' <%= (level== 13)  ? "selected" : ""%>>" +
+                "Lab Technician</option></select>"
+
+    users[<%= id%>]["selectLabSections"] = "<ul style='height: 100px; overflow-y: auto'>";
+
+        <%
+        sections = usr['labSection'].split(',')
+
+        @lab_sections.each do |sec|
+        checked = sections.include?(sec['test_category_id']) ? 'checked' : ''
+        %>
+            users[<%= id%>]["selectLabSections"] += "<div class = 'checkbox' ><label> <input class = 'lab-section-checkbox' <%= checked%> value=<%= sec['test_category_id'].to_i%> type = 'checkbox'> " +
+                                                    "<%= sec['name']%></label></div>";
+        <% end %>
+    users[<%= id%>]["selectLabSections"] += "</ul>";
+
+
+    <%
+     end
+     %>
+
+
 
 
     function __$(id){
@@ -285,8 +340,12 @@
     function editUser(userId, username){
 
         buildEditContent(userId);
-        var heada = "Edit User - " + username;
+        var heada = (username != '') ? ("Edit User - " + username) : ("Add New User");
         display(heada, true);
+        __$("popup").setAttribute('userId', userId);
+        __$("btn-save").onclick = function(){
+            post(__$("popup").getAttribute('userId'));
+        };
     }
 
     function deactivate(){
@@ -302,8 +361,9 @@
         var table = document.createElement("table");
         table.id = "table-content";
         table.vAlign = 'top';
-        table.className = "table"
+        table.className = "table";
 
+        var requiredDefaults = ['', '', '5', '', '', '', 0];
         var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
         var displayFields = ['Username', 'Actual Name', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
         var controlType = ['text', 'text', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
@@ -311,7 +371,7 @@
         for(var i = 0; i < requiredFields.length; i++){
 
             var row = document.createElement("tr");
-            row.id = requiredFields[i];
+
             row.className = " table-row row_" + ((i%2 == 0) ? 'even' : 'odd');
             row.style.display = "table-row";
             table.appendChild(row);
@@ -319,32 +379,37 @@
             var cell1 = document.createElement("td");
             cell1.className = "labell";
             cell1.style.display = "table-cell";
-            cell1.innerHTML = displayFields[i] + "<span class='pull-right'>:</span>";
+            cell1.innerHTML = displayFields[i];
             row.appendChild(cell1);
 
             var cell2 = document.createElement("td");
             cell2.className = "value";
             cell2.style.display = "table-cell";
 
-            var value = users[userId][requiredFields[i]];
-            if (requiredFields[i] == 'canverify'){
-                value = value == 0 ? "No" : "Yes";
-            }else if(requiredFields[i] == 'level'){
-                value = (value == 2) ? "Lab Manager" : ((value == 5) ? "Lab Receptionist" : "Lab Technician")
-            }else if (requiredFields[i] == 'labSection'){
-                var ids = value.split(",");
-                value = "<ol>";
-                for(var j = 0; j < ids.length; j ++){
-                    try {
-                        value += "<li>" + sections[ids[j]]['name'] + "</li>";
-                    }catch(e){}
-                }
-                value += "</ol>";
+            var value = requiredDefaults[i]
+            if (userId != -1)
+                var value = users[userId][requiredFields[i]];
 
+            if (requiredFields[i] == 'canverify'){
+                value = (value == 0) ? ("<div class='checkbox'><label><input id=\"" + requiredFields[i] + "\" type='checkbox' >Yes</label></div>") :
+                        ("<div class='checkbox'><label><input id=\"" + requiredFields[i] + "\" type='checkbox' checked >Yes</label></div>");
+            }else if(requiredFields[i] == 'level'){
+                try {
+                    value = users[userId]["typeSelect"];
+                }catch(e){
+                    value = users[-1]["typeSelect"];
+                }
+
+            }else if (requiredFields[i] == 'labSection'){
+                try {
+                    value = users[userId]["selectLabSections"];
+                }catch(e){
+                    value = users[-1]["selectLabSections"];
+                }
             }
 
             if (controlType[i] == 'text') {
-                cell2.innerHTML = "<input id='text' type='text' class='form-control' placeholder=" + value + ">"
+                cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='text' class='form-control' value=" + value + ">"
             }else{
                 cell2.innerHTML = value;
             }
@@ -354,6 +419,12 @@
 
         div.appendChild(table);
         __$("popup-content").appendChild(div);
+    }
+
+    function preselect(userId){
+        alert(userId)
+        var level = users[userd]["level"];
+        alert('level');
     }
 
     function buildViewContent(userId){
@@ -381,7 +452,7 @@
             var cell1 = document.createElement("td");
             cell1.className = "labell";
             cell1.style.display = "table-cell";
-            cell1.innerHTML = displayFields[i] + "<span class='pull-right'>:</span>";
+            cell1.innerHTML = displayFields[i];
             row.appendChild(cell1);
 
             var cell2 = document.createElement("td");
@@ -395,13 +466,13 @@
                 value = (value == 2) ? "Lab Manager" : ((value == 5) ? "Lab Receptionist" : "Lab Technician")
             }else if (requiredFields[i] == 'labSection'){
                 var ids = value.split(",");
-                value = "<ol>";
+                value = "<ul>";
                 for(var j = 0; j < ids.length; j ++){
                     try {
                         value += "<li>" + sections[ids[j]]['name'] + "</li>";
                     }catch(e){}
                 }
-                value += "</ol>";
+                value += "</ul>";
 
             }
 
@@ -414,6 +485,47 @@
     }
 
     function search(){
-            window.location = '/config/user_accounts?title=User Accounts&search_string=' + __$('text').value;
+        window.location = '/config/user_accounts?title=User Accounts&search_string=' + __$('text').value;
+    }
+
+    function post(userId){
+
+        var params = {};
+        params["userId"] = userId;
+        var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
+
+        for( var i = 0; i < requiredFields.length; i++) {
+            var value = "";
+            if (requiredFields[i] == 'labSection') {
+
+                value = [];
+                var nodes = document.getElementsByClassName("lab-section-checkbox");
+                for (var j = 0; j < nodes.length; j++){
+                    if (nodes[j].checked){
+                        value.push(nodes[j].value);
+                    }
+                }
+                value = value.join(',');
+            }else if (requiredFields[i] == 'canverify'){
+                value =  __$(requiredFields[i]).checked ? 1 : 0;
+            }else{
+                value = __$(requiredFields[i]).value;
+            }
+
+            params[requiredFields[i]] = value;
+        }
+
+        var post_url = 'post_data';
+
+        jQuery.ajax({url: post_url,
+                    type: "POST",
+                    data: params,
+                    success: function (response) {
+                        window.location = '/config/user_accounts?title=User Accounts';
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error)
+        });
     }
 </script>

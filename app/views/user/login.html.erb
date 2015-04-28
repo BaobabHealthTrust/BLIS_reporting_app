@@ -118,7 +118,7 @@ label, input, textarea, select, button {
 }
 
 #user_password {
-  width: 65%;
+
   height: auto;
   margin-left: 12px;
 }
@@ -151,14 +151,14 @@ label, input, textarea, select, button {
 
       <div class="front-welcome">
         <div class="front-welcome-text">
-          <h1 style="margin-left:10px;top:50px;position:absolute;color: white;">Welcome to LIMS reports.</h1>
+          <h1 style="margin-left:10px;top:50px;position:absolute;color: white;">Welcome to LIMS</h1>
           <p style="top:90px;margin-left:10px;position:absolute;color:white;width:350px;">
-          View reports and also query previous results.</p>
+          View reports and access configurations</p>
         </div>
       </div>
 
       <div class="front-signin js-front-signin">
-       <form action="/users/login" method="post" id="customer">
+       <form action="authenticate" method="post" id="user">
        <table class="flex-table password-signin">
         <tbody>
           <tr>
@@ -166,14 +166,14 @@ label, input, textarea, select, button {
           </tr>
           <tr>
             <td><%=password_field(:user, :password, :textCase => "lower",:placeholder => "password") %>
-            <input type ="submit" class="btn" value="Login" /></td>
+
           </tr>
           <tr>
             <td>&nbsp;</td>
           </tr>
           <tr>
             <td style="float:right;position:absolute;right:10px;">
-              <a class="btn signup_btn" href="/users/signup">Sign up for LIMS</a>
+              <input type ="submit" class="btn" value="Login" /></td>
             </td>
           </tr>
         </tbody> 
@@ -183,3 +183,5 @@ label, input, textarea, select, button {
     </div>
   </div>
 </div>
+
+
