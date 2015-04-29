@@ -6,11 +6,13 @@ Rails.application.config.assets.precompile += %w( bootstrap.css )
 Rails.application.config.assets.precompile += %w( docs.css )
 Rails.application.config.assets.precompile += %w( prettify.css )
 Rails.application.config.assets.precompile += %w( bootstrap-responsive.css )
+Rails.application.config.assets.precompile += %w( metro-bootstrap.css )
 
 
 Rails.application.config.assets.precompile += %w( jquery.js )
 Rails.application.config.assets.precompile += %w( bootstrap-dropdown.js )
 Rails.application.config.assets.precompile += %w( bootstrap-tab.js )
+Rails.application.config.assets.precompile += %w( bootstrap.js )
 
 
 # Add additional assets to the asset load path

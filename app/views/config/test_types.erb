@@ -1,0 +1,290 @@
+<html>
+<head>
+<style>
+  .even td {
+      border: 1px solid #ccc;
+      color: #1f3b5e;
+      background-color: #cfe4cd;
+      padding: 2px;
+      vertical-align: middle;
+  }
+
+  .odd td {
+      border: 1px solid #ccc;
+      color: #1f3b5e;
+      padding: 2px;
+      vertical-align: middle;
+  }
+
+  th {
+      border: 1px dotted #ccc !important;
+  }
+
+  .action  {
+      background-color: white !important;
+      border: none !important;
+  }
+
+  .btn{
+      opacity: 0.76 !important;
+  }
+
+  .uni{
+      min-width: 70px;
+  }
+
+  #shield{
+      position: absolute;
+      z-index: 2000;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100vh;
+      background: gray;
+      opacity: 0.3;
+      display: none;
+  }
+
+  #popup{
+      position: fixed;
+      z-index: 2001;
+      left: 25%;
+      width: 50%;
+      top: 50px !important;
+      height: 90% !important;
+      max-height: 90% !important;
+      background-color: whitesmoke;
+      border: 1.5px solid darkslategray;
+      border-radius: 8px;
+      opacity: 1 !important;
+      display: none;
+  }
+
+  #popup-header{
+      background-color: whitesmoke;
+      height: 5%;
+      font-size: 120%;
+  }
+  #popup-content{
+      height: 90%;
+      max-height: 90%;
+      background: white;
+      padding:0px;
+  }
+  #popup-footer{
+      height: 5%;
+      background-color: whitesmoke;
+      border-top: 1px solid lightgray;
+  }
+  #content-holder{
+      padding-top: 10px;
+      width: 100%;
+
+      overflow: auto;
+  }
+  #table-content{
+      margin-top: 5px;
+      padding-top:5px;
+      width: 100%
+  }
+  .row_even, .row_odd{
+      width: 100% !important;
+  }
+  .labell, .value{
+      height: 35px;
+      width: 50% !important;
+      vertical-align: middle !important;
+      padding-top: 8px !important;
+  }
+  .labell {
+      font-size: 1em;
+      font-weight: bold;
+      border-right: 1px dotted lightgray !Important;
+  }
+  ul {
+      list-style-type: none;
+  }
+  .checkbox input {
+      padding-top: 0px !important;
+      background: lightblue !important;
+  }
+  .green-stripe, .red-stripe{
+      width: 90px !important;
+      min-width: 90px !important;
+  }
+   td{
+       vertical-align: middle !important;
+   }
+
+</style>
+</head>
+<body>
+
+<div id = "popup">
+  <table style="width:100%;height:100%;">
+    <tr>
+        <th id="popup-header">
+         Header
+        </th>
+    </tr>
+    <tr>
+        <td id="popup-content">
+        </td>
+    </tr>
+    <tr>
+      <td id="popup-footer">
+        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" >Save</a>
+        <a style="width:12%" class="btn btn-danger pull-left" href="javascript:cancel();">Cancel</a>
+      </td>
+    </tr>
+   </table>
+
+</div>
+
+<div id="mainPage" class="page" style='width:85%;'>
+  <h3> <%= params[:title]%> </h3>
+  <p style="text-align: right;">
+    <a href="" rel="facebox">Page Help</a>
+  </p>
+
+ <table style="width: 100%;"><tr>
+   <td style="width:85%;">
+          <a class="btn btn-primary" type='button warning' href="javascript:editUser(-1, '')">
+            Add New Test Type
+          </a>
+   </td>
+   <td >
+            <input id='text' type="text" value="<%= params[:search_string]%>" class="form-control" placeholder="Search for...">
+   </td>
+   <td style="padding-bottom: 10px;">
+             <button onclick="search()" class="btn btn-default" type="button">Go!</button>
+   </td>
+ </tr></table>
+<%= @data.html_safe%>
+</div>
+<div id="shield">
+</div>
+</body>
+<script>
+
+    var greens = document.getElementsByClassName("green-stripe");
+    var reds = document.getElementsByClassName("red-stripe");
+
+    for(var i in greens){
+        greens[i].className += " btn-warning";
+        try {
+            var link = greens[i].getAttribute("href");
+            greens[i].setAttribute("tid", link.match(/\d+$/));
+            greens[i].onclick = function () {
+                buildEditPopup(this.getAttribute("tid"));
+            }
+            greens[i].removeAttribute("href");
+        }catch(e){}
+
+    }
+
+    for(var i in reds){
+        reds[i].className += " btn-danger";
+        try {
+            var link = reds[i].getAttribute("href");
+            reds[i].setAttribute("tid", link.match(/\d+$/));
+            reds[i].onclick = function () {
+                buildEditPopup(this.getAttribute("tid"));
+            }
+            reds[i].removeAttribute("href");
+        }catch(e){}
+
+    }
+
+    function buildEditPopup(tid) {
+
+
+        jQuery.ajax({url: "test_type_edit_popup?tid="+tid,
+                    success: function (response) {
+                        response = JSON.parse(response)
+                        display("Edit Test Type", true);
+                        var details = document.createElement("div");
+                        details.style.width = "100%";
+                        details.innerHTML = response['test_type_info'];
+                        __$("popup-header").appendChild(details);
+                        //window.location = '/config/test_types?title=Test Types';
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error)
+                });
+    }
+
+    function __$(id){
+        return document.getElementById(id);
+    }
+
+    function search(){
+        window.location = '/config/test_types?title=Test Types&search_string=' + __$('text').value;
+    }
+
+    function  cancel(){
+        hidePopup();
+    }
+    function display(headerTitle, showSave){
+
+        __$("shield").style.display = "table-cell";
+        __$("popup").style.display = "table-cell";
+        __$("popup-header").innerHTML = headerTitle;
+
+        if (showSave == true){
+            __$("btn-save").style.display = "block";
+        }else{
+            __$("btn-save").style.display = "none";
+        }
+    }
+    function hidePopup(){
+
+        __$("shield").style.display = "none";
+        __$("popup").style.display = "none";
+        __$("popup-header").innerHTML = "";
+        __$("popup-content").innerHTML = "";
+    }
+
+    function post(userId){
+
+        var params = {};
+        params["userId"] = userId;
+        var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
+
+        for( var i = 0; i < requiredFields.length; i++) {
+            var value = "";
+            if (requiredFields[i] == 'labSection') {
+
+                value = [];
+                var nodes = document.getElementsByClassName("lab-section-checkbox");
+                for (var j = 0; j < nodes.length; j++){
+                    if (nodes[j].checked){
+                        value.push(nodes[j].value);
+                    }
+                }
+                value = value.join(',');
+            }else if (requiredFields[i] == 'canverify'){
+                value =  __$(requiredFields[i]).checked ? 1 : 0;
+            }else{
+                value = __$(requiredFields[i]).value;
+            }
+
+            params[requiredFields[i]] = value;
+        }
+
+        var post_url = 'post_data';
+
+        jQuery.ajax({url: post_url,
+                    type: "POST",
+                    data: params,
+                    success: function (response) {
+                        window.location = '/config/user_accounts?title=User Accounts';
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error);
+        });
+    }
+</script>
+</html>

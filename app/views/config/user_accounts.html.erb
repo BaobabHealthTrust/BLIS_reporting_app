@@ -1,15 +1,15 @@
 <style>
   .even td {
       border: 1px solid #ccc;
-      color: #1f3b5e;
-      background-color: #cfe4cd;
+      color: #333333;
+      background-color: #f9f9f9;
       padding: 2px;
       vertical-align: middle;
   }
 
   .odd td {
       border: 1px solid #ccc;
-      color: #1f3b5e;
+      color: #333333;
       padding: 2px;
       vertical-align: middle;
   }
@@ -44,7 +44,7 @@
   }
 
   #popup{
-      position: absolute;
+      position: fixed;
       z-index: 2001;
       left: 28%;
       width: 40%;
@@ -106,6 +106,7 @@
       padding-top: 0px !important;
       background: lightblue !important;
   }
+
 </style>
 <div id="shield">
 </div>
@@ -167,7 +168,7 @@
            User Type
         </th>
         <th>
-           Action
+           Action(s)
         </th>
       </tr>
 
@@ -348,8 +349,24 @@
         };
     }
 
-    function deactivate(){
+    function deactivate(userId){
 
+        var post_url = 'post_data';
+
+        var params = {}
+        params['userId'] = userId;
+        params['activeStatus'] = parseInt(users[userId]['activeStatus']) == 1 ? 0 : 1;
+
+        jQuery.ajax({url: post_url,
+                    type: "POST",
+                    data: params,
+                    success: function (response) {
+                        window.location = '/config/user_accounts?title=User Accounts';
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error)
+        });
     }
 
     function buildEditContent(userId){
@@ -363,10 +380,17 @@
         table.vAlign = 'top';
         table.className = "table";
 
-        var requiredDefaults = ['', '', '5', '', '', '', 0];
-        var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
-        var displayFields = ['Username', 'Actual Name', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
-        var controlType = ['text', 'text', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
+        if (userId == -1) {
+            var requiredDefaults = ['', '', '', '5', '', '', '', 0];
+            var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
+            var displayFields = ['Username', 'Actual Name', 'Password', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
+            var controlType = ['text', 'text', 'password', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
+        }else{
+            var requiredDefaults = ['', '', '', '5', '', '', '', 0];
+            var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
+            var displayFields = ['Username', 'Actual Name', 'New Password (optional)', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
+            var controlType = ['text', 'text', 'password', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
+        }
 
         for(var i = 0; i < requiredFields.length; i++){
 
@@ -410,6 +434,8 @@
 
             if (controlType[i] == 'text') {
                 cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='text' class='form-control' value=" + value + ">"
+            }else if (controlType[i] == 'password'){
+                cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='password' class='form-control' value='' >"
             }else{
                 cell2.innerHTML = value;
             }
@@ -422,9 +448,9 @@
     }
 
     function preselect(userId){
-        alert(userId)
-        var level = users[userd]["level"];
-        alert('level');
+
+        var level = users[userId]["level"];
+
     }
 
     function buildViewContent(userId){
@@ -492,7 +518,7 @@
 
         var params = {};
         params["userId"] = userId;
-        var requiredFields = ['username', 'actualName', 'level', 'labSection', 'email', 'phone', 'canverify'];
+        var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
 
         for( var i = 0; i < requiredFields.length; i++) {
             var value = "";

@@ -19,11 +19,32 @@ class ConfigController < ApplicationController
     @lab_sections = JSON.parse(data_ls) if !data_ls.blank?
   end
 
+  def test_types
+
+    test_types_link = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=test_types"
+
+    @data = RestClient.get(test_types_link) #rescue nil
+
+  end
+
   def post_data
     @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["user_create_or_edit_link"]}"
 
     response = RestClient.post(@post_url, params)
 
     render :text => response
+  end
+
+  def test_type_edit_popup
+
+    tables = ['test_type_info', 'test_categories', 'compatible_specimens']
+    response = {}
+
+    tables.each do |table|
+      @ttype_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=#{table}&tid=#{params['tid']}"
+      response[table] = RestClient.get(@ttype_url)
+    end
+
+    render :text => response.to_json
   end
 end
