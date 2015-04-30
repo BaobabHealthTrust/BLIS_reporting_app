@@ -37,12 +37,14 @@ class ConfigController < ApplicationController
 
   def test_type_edit_popup
 
-    tables = ['test_type_info', 'test_categories', 'compatible_specimens']
+    tables = ['measures_data',  'test_type_input_info', 'compatible_specimens']
     response = {}
 
     tables.each do |table|
+
       @ttype_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=#{table}&tid=#{params['tid']}"
-      response[table] = RestClient.get(@ttype_url)
+      data = RestClient.get(@ttype_url)
+      response[table] = JSON.parse(data) rescue data
     end
 
     render :text => response.to_json

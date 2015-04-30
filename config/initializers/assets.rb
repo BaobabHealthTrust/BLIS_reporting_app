@@ -6,7 +6,6 @@ Rails.application.config.assets.precompile += %w( bootstrap.css )
 Rails.application.config.assets.precompile += %w( docs.css )
 Rails.application.config.assets.precompile += %w( prettify.css )
 Rails.application.config.assets.precompile += %w( bootstrap-responsive.css )
-Rails.application.config.assets.precompile += %w( metro-bootstrap.css )
 
 
 Rails.application.config.assets.precompile += %w( jquery.js )

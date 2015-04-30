@@ -13,12 +13,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def perform_basic_auth
-    if session[:user_id].blank?
-      #respond_to do |format|
-        #format.html { redirect_to '/login' }
-      #end
-    elsif not session[:user_id].blank?
-      #User.current = User.where(:'id' => session[:user_id]).first
+
+    if session[:user_token].blank?
+      #redirect_to '/user/login' and return
+    else
+      #check token validity
     end
   end
 

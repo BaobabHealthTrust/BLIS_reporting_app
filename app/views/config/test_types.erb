@@ -33,15 +33,23 @@
       min-width: 70px;
   }
 
+  .no-margin{
+      margin: 0px !important;
+      width: 50% !important;
+  }
+  #new_category_textbox{
+      width: 30%;
+  }
+
   #shield{
       position: absolute;
       z-index: 2000;
       top: 0px;
       left: 0px;
       width: 100%;
-      height: 100vh;
+      height: 100%;
       background: gray;
-      opacity: 0.3;
+      opacity: 0.7;
       display: none;
   }
 
@@ -49,10 +57,9 @@
       position: fixed;
       z-index: 2001;
       left: 25%;
-      width: 50%;
+      width: 45%;
       top: 50px !important;
-      height: 90% !important;
-      max-height: 90% !important;
+      height: 700px !important;
       background-color: whitesmoke;
       border: 1.5px solid darkslategray;
       border-radius: 8px;
@@ -62,26 +69,25 @@
 
   #popup-header{
       background-color: whitesmoke;
-      height: 5%;
+      height: 30px;
       font-size: 120%;
   }
+  #content{
+       height: 610px;
+       width: 100%;
+  }
   #popup-content{
-      height: 90%;
-      max-height: 90%;
+      height: 610px !important;
+      width: 100%;
+      overflow-y: auto;
       background: white;
-      padding:0px;
   }
   #popup-footer{
-      height: 5%;
+      height: 30px;
       background-color: whitesmoke;
       border-top: 1px solid lightgray;
   }
-  #content-holder{
-      padding-top: 10px;
-      width: 100%;
 
-      overflow: auto;
-  }
   #table-content{
       margin-top: 5px;
       padding-top:5px;
@@ -115,6 +121,14 @@
    td{
        vertical-align: middle !important;
    }
+   h4{
+       width: 380px;
+       background-color: darkseagreen;
+       border: 1px dotted;
+       margin-top: 0px;
+       padding: 5px;
+       font-size: 1.2em;
+   }
 
 </style>
 </head>
@@ -122,13 +136,16 @@
 
 <div id = "popup">
   <table style="width:100%;height:100%;">
-    <tr>
+    <tr >
         <th id="popup-header">
          Header
         </th>
     </tr>
     <tr>
-        <td id="popup-content">
+        <td id="content">
+          <div id="popup-content">
+
+          </div>
         </td>
     </tr>
     <tr>
@@ -205,8 +222,19 @@
                         display("Edit Test Type", true);
                         var details = document.createElement("div");
                         details.style.width = "100%";
-                        details.innerHTML = response['test_type_info'];
-                        __$("popup-header").appendChild(details);
+                        details.innerHTML = response['test_type_input_info'];
+                        __$("popup-content").appendChild(details);
+                        var specimen_types = document.createElement("div");
+                        specimen_types.style.width = "100%";
+                        specimen_types.innerHTML = "<h4>Compatible Specimens</h4>" + response["compatible_specimens"];
+                        __$("popup-content").appendChild(specimen_types);
+
+                        var measures = document.createElement("div");
+                        measures.style,width = "100%";
+                        measures.innerHTML = "<h4>Measures</h4>" + getMeasuresTable(response['measures_data']);
+
+                        __$("popup-content").appendChild(measures);
+
                         //window.location = '/config/test_types?title=Test Types';
                     }
                 }
@@ -286,5 +314,26 @@
                     alert(error);
         });
     }
+
+    function check_if_new_category(select_obj)
+    {
+        var value = $('#cat_code').val();
+        if(value == -1)
+        {
+            $('#new_category').show();
+        }
+        else
+        {
+            $('#new_category_textbox').val("");
+            $('#new_category').hide();
+        }
+    }
+
+    function getMeasuresTable(data){
+        if (data){
+
+        }
+    }
+
 </script>
 </html>
