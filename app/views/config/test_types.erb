@@ -57,7 +57,8 @@
       position: fixed;
       z-index: 2001;
       left: 25%;
-      width: 45%;
+      width: 700px;
+      max-width: 700px;
       top: 50px !important;
       height: 700px !important;
       background-color: whitesmoke;
@@ -74,11 +75,11 @@
   }
   #content{
        height: 610px;
-       width: 100%;
+       width: 700px;
   }
   #popup-content{
       height: 610px !important;
-      width: 100%;
+      width: 700px;
       overflow-y: auto;
       background: white;
   }
@@ -130,12 +131,57 @@
        font-size: 1.2em;
    }
 
+   #measure-table{
+       margin-top: 8px;
+       margin-bottom: 15px;
+       display: table;
+       width: 98%;
+       padding-top: 10px !important;
+   }
+  #measure-table .table-row{
+      display: table-row;
+      table-layout:fixed;
+  }
+
+  #measure-table .td{
+      display: table-cell;
+      text-align: center;
+  }
+
+  #measure-table input{
+      max-width: 600px !important;
+      margin: 0px !important;
+  }
+
+
+
+   #measure-table td{
+       border: 0.5px solid lightgray;
+   }
+
+   .data{
+       padding-top: 5px !important;
+       vertical-align: top !important;
+   }
+
+   #popup .table td{
+       padding: 3px !important;
+   }
+   .add-button{
+       font-size: 0.85em;
+   }
+ body, #popup{
+     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif !important;
+ }
+    .numeric-row input,  .numeric-row select{
+        width: 60px !important;
+    }
 </style>
 </head>
 <body>
 
 <div id = "popup">
-  <table style="width:100%;height:100%;">
+  <table style="width:700px;height:700px;">
     <tr >
         <th id="popup-header">
          Header
@@ -231,7 +277,8 @@
 
                         var measures = document.createElement("div");
                         measures.style,width = "100%";
-                        measures.innerHTML = "<h4>Measures</h4>" + getMeasuresTable(response['measures_data']);
+                        measures.innerHTML = "<h4>Measures</h4>";
+                        measures.appendChild(getMeasuresTable(response['measures_data']));
 
                         __$("popup-content").appendChild(measures);
 
@@ -239,7 +286,7 @@
                     }
                 }
         ).fail(function(xhr, status, error){
-                    alert(error)
+                    alert(error);
                 });
     }
 
@@ -331,9 +378,227 @@
 
     function getMeasuresTable(data){
         if (data){
+            var table = document.createElement('table');
+            table.id = "measure-table";
 
+            //****** build header ***********
+            var header = document.createElement("tr");
+            header.className = "table-row";
+            table.appendChild(header);
+
+            var headerData = ["Delete", "Name", "Type", "Values", "Unit"]
+
+            for (var i in headerData){
+                var node = document.createElement("td");
+                node.innerHTML = headerData[i];
+                node.className = "td td-" + (parseInt(i) + 1);
+                header.appendChild(node);
+            }
+
+            //****** build contents *******
+
+
+            for (var j in data) {
+
+                var measure = data[j];
+                console.log(measure);
+                var msr = document.createElement("tr");
+                msr.className = "table-row";
+                msr.id = measure["measure"]["measureId"];
+                table.appendChild(msr);
+
+                var cols = [
+                    ["delete", "checkbox"],
+                    ["name", "text"],
+                    ["type", "dropdown"],
+                    ["values", "dynamic"],
+                    ["unit", "text"]
+                ];
+
+                for (var i in cols) {
+
+                    var node = document.createElement("td");
+                    node.className = "td data data-" + (parseInt(i) + 1);
+
+                    switch (cols[i][0]) {
+                        case 'delete':
+
+                            var inp = document.createElement("input");
+                            inp.className = "delete";
+                            inp.setAttribute("type", cols[i][1]);
+                            inp.style.width = "50px";
+                            node.appendChild(inp);
+                            break;
+                        case 'name':
+
+                            var inp = document.createElement("input");
+                            inp.className = "name name_" + measure["measure"]["measureId"];
+                            inp.setAttribute("type", cols[i][1]);
+                            inp.style.width = "105px";
+                            inp.value = measure["measure"]["name"];
+                            node.appendChild(inp);
+                            break;
+                        case 'type':
+
+                            var inp = document.createElement("select");
+                            inp.id = "select_" + measure["measure"]["measureId"];
+                            var options = [["Numeric Range", 'numeric'], ["Alphanumeric Values", 'options'], ["Freetext", 'freetext']]
+
+                            for (var k in options){
+
+                                var opt = document.createElement("option");
+                                opt.setAttribute("value", options[k][1]);
+                                opt.innerHTML = options[k][0];
+                                if (measure["range_type"] == options[k][1])
+                                    opt.selected = true;
+
+                                inp.appendChild(opt);
+                            }
+
+                            inp.style.width = "100px";
+                            node.appendChild(inp);
+                            break;
+                        case 'values':
+
+                            if (measure["range_type"] == "numeric"){
+
+                                var table2 = document.createElement("table");
+                                table2.className = "numeric-table";
+                                node.appendChild(table2);
+
+                                var addButton = document.createElement("a");
+                                addButton.className = "add-button";
+                                addButton.id = "add_" + measure["measure"]["measureId"];
+                                addButton.innerHTML = "<br /><span>Add Another<span>";
+                                addButton.onclick = function(){
+                                    var input = document.createElement("input");
+                                    input.style.width = "40%";
+                                    var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
+                                    this.parentNode.childNodes[0].appendChild(new_row);
+                                }
+
+                                node.appendChild(addButton);
+
+
+                                for(var n in measure["ref_ranges"]){
+                                    var row = createRow(measure["ref_ranges"][n]["id"], 'numeric-row', ['range', 'gender', 'age_range'], measure["ref_ranges"][n]);
+                                    table2.appendChild(row);
+                                }
+                            }else if (measure["range_type"] == "freetext"){
+                                //leave blank
+                            }else if (measure["range_type"] == "options"){
+                                for(var n in measure["range_values"]){
+                                    var input = document.createElement("input");
+                                    input.setAttribute("value", measure["range_values"][n]);
+                                    input.style.width = "40%";
+                                    node.appendChild(input);
+                                    node.innerHTML += " / ";
+                                }
+
+                                var addButton = document.createElement("a");
+                                addButton.className = "add-button";
+                                addButton.id = "add_" + measure["measure"]["measureId"];
+                                addButton.innerHTML = "<br /><span>Add Another<span>";
+                                addButton.onclick = function(){
+                                    var input = document.createElement("input");
+                                    input.style.width = "40%";
+                                    this.parentNode.insertBefore(input, this);
+                                    this.parentNode.insertBefore(document.createTextNode(" / "), this);
+                                }
+
+                                node.appendChild(addButton);
+                            }
+
+                            break;
+                        case 'unit':
+
+                            var inp = document.createElement("input");
+                            inp.className = "unit unit_" + measure["measure"]["measureId"];
+                            inp.setAttribute("type", cols[i][1]);
+                            inp.style.width = "90px";
+                            inp.value = measure["measure"]["unit"];
+                            node.appendChild(inp);
+                            break;
+                    }
+
+                    msr.appendChild(node);
+                }
+            }
+
+            return table;
         }
     }
+
+ function createRow(pos, clas, options, data){
+     if (parseInt(pos) >= 0){
+         var row = document.createElement("tr")
+         row.className = clas;
+         row.id = "numeric_row_"+pos;
+
+         for (var i = 0; i < options.length; i ++){
+             if (options[i] == 'range'){
+
+                 var td = document.createElement("td");
+                 row.appendChild(td);
+
+                 var input1 = document.createElement("input");
+                 input1.className = "min";
+                 if (data["rangeLower"])
+                    input1.value = data["rangeLower"];
+                 td.appendChild(input1);
+
+                 var td = document.createElement("td");
+                 row.appendChild(td);
+
+                 var input2 = document.createElement("input");
+                 input2.className = "max";
+                 if(data["rangeUpper"])
+                    input2.value = data["rangeUpper"];
+                 td.appendChild(input2);
+             }else if(options[i] == "gender"){
+
+                 var td = document.createElement("td");
+                 row.appendChild(td);
+
+                 var sel = document.createElement("select");
+                 sel.className = "gender";
+                 row.appendChild(sel);
+
+                 var dt = [["Both", "B"], ["Male", "M"], ["Female", "F"]];
+
+                 for (var k in dt){
+
+                     var od = document.createElement("option");
+                     od.setAttribute("value", dt[k][1]);
+                     if(dt[k][1] == data["sex"])
+                        od.selected = true;
+                     od.innerHTML = dt[k][0];
+                     sel.appendChild(od);
+                 }
+             }else if(options[i] == "age_range"){
+
+                 var td = document.createElement("td");
+                 row.appendChild(td);
+
+                 var input1 = document.createElement("input");
+                 input1.className = "age_min";
+                 if(data["ageMin"])
+                    input1.value = data["ageMin"];
+                 td.appendChild(input1);
+
+                 var td = document.createElement("td");
+                 row.appendChild(td);
+
+                 var input2 = document.createElement("input");
+                 input2.className = "ageMax";
+                 if(data["ageMax"])
+                    input2.value = data["ageMax"];
+                 td.appendChild(input2);
+             }
+         }
+     }
+     return row;
+ }
 
 </script>
 </html>
