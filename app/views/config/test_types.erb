@@ -169,18 +169,34 @@
    }
    .add-button{
        font-size: 0.85em;
-   }
- body, #popup{
+    }
+    body, #popup{
      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif !important;
- }
+    }
     .numeric-row input,  .numeric-row select{
         width: 60px !important;
+    }
+    .header td{
+        width: 60px !important;
+        font-size: 12px;
+        background: lightgray;
+        border: 1px dotted white !important;
+        text-align: center;
+    }
+    .numeric-row select{
+        margin-top: 5px !important;
+    }
+    .unit-td {
+       padding-top: 33.5px !important;
+    }
+    .danger-col, .warning-col{
+        width: 90px !important;
     }
 </style>
 </head>
 <body>
 
-<div id = "popup">
+<form id = "popup">
   <table style="width:700px;height:700px;">
     <tr >
         <th id="popup-header">
@@ -196,14 +212,15 @@
     </tr>
     <tr>
       <td id="popup-footer">
-        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" >Save</a>
+        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" href="javascript:save();">Save</a>
         <a style="width:12%" class="btn btn-danger pull-left" href="javascript:cancel();">Cancel</a>
       </td>
     </tr>
    </table>
 
-</div>
+</form>
 
+<form>
 <div id="mainPage" class="page" style='width:85%;'>
   <h3> <%= params[:title]%> </h3>
   <p style="text-align: right;">
@@ -225,11 +242,13 @@
  </tr></table>
 <%= @data.html_safe%>
 </div>
+  </form>
 <div id="shield">
 </div>
+
 </body>
 <script>
-
+    var globalMeasures = {};
     var greens = document.getElementsByClassName("green-stripe");
     var reds = document.getElementsByClassName("red-stripe");
 
@@ -238,6 +257,7 @@
         try {
             var link = greens[i].getAttribute("href");
             greens[i].setAttribute("tid", link.match(/\d+$/));
+            greens[i].parentNode.className += "warning-col";
             greens[i].onclick = function () {
                 buildEditPopup(this.getAttribute("tid"));
             }
@@ -251,6 +271,7 @@
         try {
             var link = reds[i].getAttribute("href");
             reds[i].setAttribute("tid", link.match(/\d+$/));
+            reds[i].parentNode.className += "danger-col";
             reds[i].onclick = function () {
                 buildEditPopup(this.getAttribute("tid"));
             }
@@ -261,10 +282,15 @@
 
     function buildEditPopup(tid) {
 
+        if (tid)
+            __$("popup").setAttribute("tid", tid);
+        else
+            __$("popup").removeAttribute("tid");
+
 
         jQuery.ajax({url: "test_type_edit_popup?tid="+tid,
                     success: function (response) {
-                        response = JSON.parse(response)
+                        response = JSON.parse(response);
                         display("Edit Test Type", true);
                         var details = document.createElement("div");
                         details.style.width = "100%";
@@ -278,9 +304,17 @@
                         var measures = document.createElement("div");
                         measures.style,width = "100%";
                         measures.innerHTML = "<h4>Measures</h4>";
+                        globalMeasures = response['measures_data'];
                         measures.appendChild(getMeasuresTable(response['measures_data']));
 
                         __$("popup-content").appendChild(measures);
+                        var addGlobal = document.createElement("a");
+                        addGlobal.innerHTML = "Add Another";
+                        addGlobal.className = "add-button";
+                        __$("popup-content").appendChild(addGlobal);
+                        addGlobal.onclick = function(){
+                            blankMeasure();
+                        }
 
                         //window.location = '/config/test_types?title=Test Types';
                     }
@@ -301,6 +335,27 @@
     function  cancel(){
         hidePopup();
     }
+
+    function save(){
+
+        params = buildParams();
+        params['post_type'] = "test_type";
+
+        var post_url = 'post_data';
+
+        jQuery.ajax({url: post_url,
+                    type: "POST",
+                    data: params,
+                    success: function (response) {
+                        console.log(response);
+                       // window.location = '/config/test_types?title=User Accounts';
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error);
+                });
+    }
+
     function display(headerTitle, showSave){
 
         __$("shield").style.display = "table-cell";
@@ -376,6 +431,158 @@
         }
     }
 
+    function blankMeasure(){
+        var measure = {};
+        var table = __$("measure-table");
+        var msr = document.createElement("tr");
+        msr.className = "table-row new-measure";
+        table.appendChild(msr);
+
+        var cols = [
+            ["delete", "checkbox"],
+            ["name", "text"],
+            ["type", "dropdown"],
+            ["values", "dynamic"],
+            ["unit", "text"]
+        ];
+
+        for (var i in cols) {
+
+            var node = document.createElement("td");
+
+            node.className = "td data data-" + (parseInt(i) + 1);
+
+            switch (cols[i][0]) {
+                case 'delete':
+
+                    var inp = document.createElement("input");
+                    inp.className = "delete";
+                    inp.setAttribute("type", cols[i][1]);
+                    inp.style.width = "50px";
+                    node.appendChild(inp);
+                    break;
+                case 'name':
+
+                    var inp = document.createElement("input");
+                    inp.className = "name name_"
+                    inp.setAttribute("type", cols[i][1]);
+                    inp.style.width = "105px";
+                    node.appendChild(inp);
+                    break;
+                case 'type':
+
+                    var inp = document.createElement("select");
+                    inp.id = "select_"
+                    inp.className = "select";
+                    var options = [["Numeric Range", 'numeric'], ["Alphanumeric Values", 'options'], ["Freetext", 'freetext']]
+
+                    for (var k in options){
+
+                        var opt = document.createElement("option");
+                        opt.setAttribute("value", options[k][1]);
+                        opt.innerHTML = options[k][0];
+
+                        inp.appendChild(opt);
+                    }
+
+                    inp.style.width = "100px";
+                    node.appendChild(inp);
+
+                    inp.onchange =  function(){
+
+                            var node = this.parentNode.parentNode.getElementsByClassName("values")[0]//[0];
+                            node.innerHTML = "";
+
+                            var unit = node.parentNode.getElementsByClassName("unit")[0]
+                            unit.value = "";
+                            jQuery(unit).hide();
+
+                            if (this.value == "numeric"){
+                                var table2 = document.createElement("table");
+                                table2.className = "numeric-table";
+                                node.appendChild(table2);
+                                jQuery(unit).show();
+
+                                var addButton = document.createElement("a");
+                                addButton.className = "add-button";
+                                addButton.innerHTML = "<br /><span>Add Another<span>";
+                                addButton.onclick = function(){
+                                    var input = document.createElement("input");
+                                    input.style.width = "40%";
+                                    var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
+
+                                    this.parentNode.getElementsByClassName("numeric-table")[0].appendChild(new_row);
+                                }
+
+                                node.appendChild(addButton);
+
+                                var row = createRow("-1", 'header', [], {});
+                                table2.appendChild(row);
+
+                                addButton.click();
+                            }else if(this.value == "options"){
+
+                                var addButton = document.createElement("a");
+                                addButton.className = "add-button";
+                                addButton.innerHTML = "<br /><span>Add Another<span>";
+                                addButton.onclick = function(){
+                                    var input = document.createElement("input");
+                                    input.style.width = "40%";
+                                    this.parentNode.insertBefore(input, this);
+                                    this.parentNode.insertBefore(document.createTextNode(" / "), this);
+                                }
+
+                                node.appendChild(addButton);
+                                addButton.click();
+                            }
+                    }
+
+                    break;
+                case 'values':
+
+                    node.id = "values_";
+                    node.className = " values";
+
+                    var table2 = document.createElement("table");
+                    table2.className = "numeric-table";
+                    node.appendChild(table2);
+
+                    var addButton = document.createElement("a");
+                    addButton.className = "add-button";
+                    addButton.innerHTML = "<br /><span>Add Another<span>";
+                    addButton.onclick = function(){
+                        var input = document.createElement("input");
+                        input.style.width = "40%";
+                        var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
+
+                        this.parentNode.getElementsByClassName("numeric-table")[0].appendChild(new_row);
+                    }
+
+                    node.appendChild(addButton);
+
+                    var row = createRow("-1", 'header', [], {});
+                    table2.appendChild(row);
+
+                    addButton.click();
+
+                    break;
+                case 'unit':
+
+                    node.id = "unit_";
+                    node.className += " unit-td"
+                    var inp = document.createElement("input");
+                    inp.className = "unit unit_";
+                    inp.setAttribute("type", cols[i][1]);
+                    inp.style.width = "90px";
+                    node.appendChild(inp);
+                    break;
+            }
+
+            msr.appendChild(node);
+        }
+
+    }
+
     function getMeasuresTable(data){
         if (data){
             var table = document.createElement('table');
@@ -401,9 +608,8 @@
             for (var j in data) {
 
                 var measure = data[j];
-                console.log(measure);
                 var msr = document.createElement("tr");
-                msr.className = "table-row";
+                msr.className = "table-row old-measure";
                 msr.id = measure["measure"]["measureId"];
                 table.appendChild(msr);
 
@@ -418,11 +624,13 @@
                 for (var i in cols) {
 
                     var node = document.createElement("td");
+
                     node.className = "td data data-" + (parseInt(i) + 1);
 
                     switch (cols[i][0]) {
                         case 'delete':
 
+                            node.id = "delete_" + measure["measure"]["measureId"];
                             var inp = document.createElement("input");
                             inp.className = "delete";
                             inp.setAttribute("type", cols[i][1]);
@@ -430,6 +638,8 @@
                             node.appendChild(inp);
                             break;
                         case 'name':
+
+                            node.id = "name_" + measure["measure"]["measureId"];
 
                             var inp = document.createElement("input");
                             inp.className = "name name_" + measure["measure"]["measureId"];
@@ -440,7 +650,9 @@
                             break;
                         case 'type':
 
+                            node.id = "types_" + measure["measure"]["measureId"];
                             var inp = document.createElement("select");
+                            inp.className = "select";
                             inp.id = "select_" + measure["measure"]["measureId"];
                             var options = [["Numeric Range", 'numeric'], ["Alphanumeric Values", 'options'], ["Freetext", 'freetext']]
 
@@ -449,75 +661,113 @@
                                 var opt = document.createElement("option");
                                 opt.setAttribute("value", options[k][1]);
                                 opt.innerHTML = options[k][0];
-                                if (measure["range_type"] == options[k][1])
+                                if (measure["range_type"] == options[k][1]) {
                                     opt.selected = true;
+                                    opt.setAttribute("class", "default");
+                                }
 
                                 inp.appendChild(opt);
                             }
 
                             inp.style.width = "100px";
+                            inp.setAttribute("measure_id", measure["measure"]["measureId"]);
                             node.appendChild(inp);
+
+                            inp.onchange =  function(){
+
+                                var df = this.getElementsByClassName("default")[0];
+                                var node = __$("values_"+this.getAttribute("measure_id"));
+                                node.innerHTML = "";
+
+                                if (this.value == df.getAttribute("value")) {
+                                    var measure = globalMeasures[this.getAttribute("measure_id")];
+
+                                    if (this.value == "numeric"){
+                                        createNumerics(measure, node);
+                                    }else if (this.value == "options"){
+                                        createList(measure, node);
+                                    }
+                                }else{
+
+                                    var unit = node.parentNode.getElementsByClassName("unit")[0]
+                                    unit.value = "";
+                                    jQuery(unit).hide();
+
+                                    if (this.value == "numeric"){
+                                        var table2 = document.createElement("table");
+                                        table2.className = "numeric-table";
+                                        node.appendChild(table2);
+                                        jQuery(unit).show();
+
+                                        var addButton = document.createElement("a");
+                                        addButton.className = "add-button";
+                                        addButton.id = "add_" + this.getAttribute("measure_id");
+
+                                        addButton.innerHTML = "<br /><span>Add Another<span>";
+                                        addButton.onclick = function(){
+                                            var input = document.createElement("input");
+                                            input.style.width = "40%";
+                                            var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
+
+                                            this.parentNode.getElementsByClassName("numeric-table")[0].appendChild(new_row);
+                                        }
+
+                                        node.appendChild(addButton);
+
+                                        var row = createRow("-1", 'header', [], {});
+                                        table2.appendChild(row);
+
+                                        addButton.click();
+                                    }else if(this.value == "options"){
+
+                                        var addButton = document.createElement("a");
+                                        addButton.className = "add-button";
+                                        addButton.id = "add_" + this.getAttribute("measure_id");
+                                        addButton.innerHTML = "<br /><span>Add Another<span>";
+                                        addButton.onclick = function(){
+                                            var input = document.createElement("input");
+                                            input.style.width = "40%";
+                                            this.parentNode.insertBefore(input, this);
+                                            this.parentNode.insertBefore(document.createTextNode(" / "), this);
+                                        }
+
+                                        node.appendChild(addButton);
+                                        addButton.click();
+                                    }
+                                }
+                            }
+
                             break;
                         case 'values':
 
+                            node.id = "values_" + measure["measure"]["measureId"];
                             if (measure["range_type"] == "numeric"){
 
-                                var table2 = document.createElement("table");
-                                table2.className = "numeric-table";
-                                node.appendChild(table2);
-
-                                var addButton = document.createElement("a");
-                                addButton.className = "add-button";
-                                addButton.id = "add_" + measure["measure"]["measureId"];
-                                addButton.innerHTML = "<br /><span>Add Another<span>";
-                                addButton.onclick = function(){
-                                    var input = document.createElement("input");
-                                    input.style.width = "40%";
-                                    var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
-                                    this.parentNode.childNodes[0].appendChild(new_row);
-                                }
-
-                                node.appendChild(addButton);
-
-
-                                for(var n in measure["ref_ranges"]){
-                                    var row = createRow(measure["ref_ranges"][n]["id"], 'numeric-row', ['range', 'gender', 'age_range'], measure["ref_ranges"][n]);
-                                    table2.appendChild(row);
-                                }
+                                createNumerics(measure, node);
                             }else if (measure["range_type"] == "freetext"){
-                                //leave blank
+
+                              //Leave blank
                             }else if (measure["range_type"] == "options"){
-                                for(var n in measure["range_values"]){
-                                    var input = document.createElement("input");
-                                    input.setAttribute("value", measure["range_values"][n]);
-                                    input.style.width = "40%";
-                                    node.appendChild(input);
-                                    node.innerHTML += " / ";
-                                }
 
-                                var addButton = document.createElement("a");
-                                addButton.className = "add-button";
-                                addButton.id = "add_" + measure["measure"]["measureId"];
-                                addButton.innerHTML = "<br /><span>Add Another<span>";
-                                addButton.onclick = function(){
-                                    var input = document.createElement("input");
-                                    input.style.width = "40%";
-                                    this.parentNode.insertBefore(input, this);
-                                    this.parentNode.insertBefore(document.createTextNode(" / "), this);
-                                }
-
-                                node.appendChild(addButton);
+                                createList(measure, node);
                             }
 
                             break;
                         case 'unit':
 
+                            node.id = "unit_" + measure["measure"]["measureId"];
+                            node.className += " unit-td";
                             var inp = document.createElement("input");
                             inp.className = "unit unit_" + measure["measure"]["measureId"];
                             inp.setAttribute("type", cols[i][1]);
                             inp.style.width = "90px";
                             inp.value = measure["measure"]["unit"];
                             node.appendChild(inp);
+
+                            if(measure["range_type"] != "numeric"){
+                                jQuery(inp).hide();
+                            }
+
                             break;
                     }
 
@@ -529,11 +779,104 @@
         }
     }
 
+    function createList(measure, node){
+
+        for(var n in measure["range_values"]){
+            var input = document.createElement("input");
+            input.setAttribute("value", measure["range_values"][n]);
+            input.className = "list-node";
+            input.style.width = "40%";
+            node.appendChild(input);
+            node.innerHTML += " / ";
+        }
+
+        var addButton = document.createElement("a");
+        addButton.className = "add-button";
+        addButton.id = "add_" + measure["measure"]["measureId"];
+        addButton.innerHTML = "<br /><span>Add Another<span>";
+        addButton.onclick = function(){
+            var input = document.createElement("input");
+            input.style.width = "40%";
+            this.parentNode.insertBefore(input, this);
+            this.parentNode.insertBefore(document.createTextNode(" / "), this);
+        }
+
+        node.appendChild(addButton);
+    }
+
+    function createNumerics(measure, node){
+
+        var table2 = document.createElement("table");
+        table2.className = "numeric-table";
+        node.appendChild(table2);
+
+        if (node.parentNode) {
+            var unit = node.parentNode.getElementsByClassName("unit");
+            if (unit.length > 0) {
+                unit[0].value = measure["measure"]["unit"];
+                jQuery(unit).show();
+            }
+        }
+
+        var addButton = document.createElement("a");
+        addButton.className = "add-button";
+        addButton.id = "add_" + measure["measure"]["measureId"];
+        addButton.innerHTML = "<br /><span>Add Another<span>";
+        addButton.onclick = function(){
+            var input = document.createElement("input");
+            input.style.width = "40%";
+            var new_row = createRow('0', 'numeric-row', ['range', 'gender', 'age_range'], {});
+            this.parentNode.childNodes[0].appendChild(new_row);
+        }
+
+        node.appendChild(addButton);
+
+        var row = createRow("-1", 'header', [], {});
+        table2.appendChild(row);
+
+        for(var n in measure["ref_ranges"]){
+            var row = createRow(measure["ref_ranges"][n]["id"], 'numeric-row', ['range', 'gender', 'age_range'], measure["ref_ranges"][n]);
+            table2.appendChild(row);
+        }
+
+        return table2;
+    }
+
  function createRow(pos, clas, options, data){
-     if (parseInt(pos) >= 0){
+     if (parseInt(pos) >= -1){
          var row = document.createElement("tr")
          row.className = clas;
          row.id = "numeric_row_"+pos;
+
+         if (clas == 'header'){
+
+             row.className += " header";
+
+             var td = document.createElement("td");
+             td.innerHTML = "<span>Min</span>";
+             row.appendChild(td);
+
+             var td = document.createElement("td");
+             td.innerHTML = "<span>Max</span>";
+             row.appendChild(td);
+
+             var td = document.createElement("td");
+             td.innerHTML = "<span>Gender</span>";
+             row.appendChild(td);
+
+             var td = document.createElement("td");
+             td.innerHTML = "<span>Min Age</span>";
+             row.appendChild(td);
+
+             var td = document.createElement("td");
+             td.innerHTML = "<span>Max Age</span>";
+             row.appendChild(td);
+
+             return row;
+         }
+
+         if (data["id"])
+            row.setAttribute("range_id", data["id"]);
 
          for (var i = 0; i < options.length; i ++){
              if (options[i] == 'range'){
@@ -543,6 +886,7 @@
 
                  var input1 = document.createElement("input");
                  input1.className = "min";
+
                  if (data["rangeLower"])
                     input1.value = data["rangeLower"];
                  td.appendChild(input1);
@@ -552,6 +896,7 @@
 
                  var input2 = document.createElement("input");
                  input2.className = "max";
+
                  if(data["rangeUpper"])
                     input2.value = data["rangeUpper"];
                  td.appendChild(input2);
@@ -562,7 +907,7 @@
 
                  var sel = document.createElement("select");
                  sel.className = "gender";
-                 row.appendChild(sel);
+                 td.appendChild(sel);
 
                  var dt = [["Both", "B"], ["Male", "M"], ["Female", "F"]];
 
@@ -582,6 +927,7 @@
 
                  var input1 = document.createElement("input");
                  input1.className = "age_min";
+
                  if(data["ageMin"])
                     input1.value = data["ageMin"];
                  td.appendChild(input1);
@@ -591,6 +937,7 @@
 
                  var input2 = document.createElement("input");
                  input2.className = "ageMax";
+
                  if(data["ageMax"])
                     input2.value = data["ageMax"];
                  td.appendChild(input2);
@@ -599,6 +946,101 @@
      }
      return row;
  }
+
+function buildParams(){
+
+    var data = {};
+    var popup = __$("popup")
+
+    data["tid"] = popup.getAttribute("tid");
+    data["cat_code"] = __$("cat_code").value;
+    data["t_name"] = __$("t_name").value;
+    data["desc"] = __$("desc").value;
+    data["hide_name"] = __$("name_hide").value;
+
+    var specimen_nodes = jQuery(".stype_entry:checked");
+    data["specimen_types"] = [];
+    for (var i = 0; i < specimen_nodes.length; i++){
+        data["specimen_types"].push(specimen_nodes[i].value);
+    }
+
+    data["measures"] = {};
+    data["measures"]["delete"] = [];
+    data["measures"]["update"] = [];
+    data["measures"]["add"] = [];
+    data["measures"]["link"] = [];
+
+    var to_delete = jQuery(".delete:checked");
+    for (var i = 0; i < to_delete.length; i ++){
+
+        var m_id = to_delete[i].parentNode.parentNode.id;
+        if(m_id && parseInt(m_id) > 0) {
+            data["measures"]["delete"].push(m_id);
+        }
+    }
+
+    var to_update = jQuery(".old-measure");
+    data = extractValues(to_update, data, "update");
+    var to_add = jQuery(".new-measure");
+    data = extractValues(to_add, data, "add");
+
+    return data;
+}
+
+function extractValues(nodes, data, key){
+
+    for (var i = 0; i < nodes.length; i ++){
+        var msr = {}
+        if(jQuery(nodes[i]).find(".delete:checked").length > 0){
+            continue;
+        }else{
+
+            msr["id"] = nodes[i].id;
+
+            var name = jQuery(nodes[i]).find(".name")[0].value;
+            msr["name"] = name;
+
+            var range_type = jQuery(nodes[i]).find(".select")[0].value;
+            msr["range_type"] = range_type;
+
+            if (range_type == "options"){
+
+                var range_nodes = jQuery(nodes[i]).find(".list-node");
+                var range_values = [];
+
+                for(var  j = 0; j < range_nodes.length; j ++){
+                    if (range_nodes[j].value && range_nodes[j].value != "")
+                        range_values.push(range_nodes[j].value);
+                }
+                msr["range_values"] = range_values;
+            }else if (range_type == "numeric"){
+
+                var nrows = jQuery(nodes[i]).find(".numeric-row");
+                var ref_ranges = [];
+                for(var j = 0; j < nrows.length; j++){
+
+                    var range = {};
+                    if(nrows[j].getAttribute("range_id"))
+                        range["range_id"] = nrows[j].getAttribute("range_id");
+                    var nnodes = jQuery(nrows[j]).find("td");
+
+                    for (var k = 0; k < nnodes.length; k ++){
+                        range[nnodes[k].childNodes[0].className] = nnodes[k].childNodes[0].value;
+                    }
+                    ref_ranges.push(range);
+                }
+
+                var unit = jQuery(nodes[i]).find(".unit")[0].value;
+                msr["unit"] = unit;
+                msr["ref_ranges"] = ref_ranges;
+            }else{
+
+            }
+        }
+        data["measures"][key].push(msr);
+    }
+    return data;
+}
 
 </script>
 </html>
