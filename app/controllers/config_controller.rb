@@ -28,12 +28,13 @@ class ConfigController < ApplicationController
   end
 
   def post_data
-raise params.to_yaml
+
     if params[:post_type] == ""
       @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_test_type_save"]}"
     else
       @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["user_create_or_edit_link"]}"
     end
+
     response = RestClient.post(@post_url, params)
 
     render :text => response
