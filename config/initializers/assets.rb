@@ -12,7 +12,8 @@ Rails.application.config.assets.precompile += %w( jquery.js )
 Rails.application.config.assets.precompile += %w( bootstrap-dropdown.js )
 Rails.application.config.assets.precompile += %w( bootstrap-tab.js )
 Rails.application.config.assets.precompile += %w( bootstrap.js )
-
+Rails.application.config.assets.precompile += %w( jquery.validate.min.js )
+Rails.application.config.assets.precompile += %w( additional-methods.min.js )
 
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path

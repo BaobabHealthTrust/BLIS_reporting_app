@@ -1,6 +1,9 @@
 <html>
 <head>
 <style>
+  .error{
+      color: red;
+  }
   .even td {
       border: 1px solid #ccc;
       color: #1f3b5e;
@@ -229,7 +232,7 @@
 
  <table style="width: 100%;"><tr>
    <td style="width:85%;">
-          <a class="btn btn-primary" type='button warning' href="javascript:editUser(-1, '')">
+          <a class="btn btn-primary" type='button warning' href="javascript:buildEditPopup(-1)">
             Add New Test Type
           </a>
    </td>
@@ -315,8 +318,6 @@
                         addGlobal.onclick = function(){
                             blankMeasure();
                         }
-
-                        //window.location = '/config/test_types?title=Test Types';
                     }
                 }
         ).fail(function(xhr, status, error){
@@ -326,6 +327,43 @@
 
     function __$(id){
         return document.getElementById(id);
+    }
+
+    function loadValidations(){
+        var nodes = $("#popup input, #popup textarea, #popup select")
+        for (var i = 0; i < nodes.length; i ++){
+            $(nodes[i]).attr("name", ("temp_" + i));
+        }
+
+        $(".stype_entry").attr("name", 'stype');
+        $(".stype_entry").attr({
+            'name': 'stype',
+            'required': true
+        })
+
+        $(".min, .max, .unit, .name, .list-node, .gender, #t_name, #loinc, .age_min, .age_max").attr("required", true);
+
+        $(".min, .max, .age_min, .age_max").attr("number", true);
+
+        $("#t_name, #loinc").attr({
+           'minLength': 2
+        })
+
+        $(".age_min").attr({
+            'min': 0,
+            'max': 120
+        })
+
+        $(".age_max").attr({
+            'min': 1,
+            'max': 120
+        })
+
+        var form = $( "#popup" );
+
+        form.validate();
+
+        return form.valid();
     }
 
     function search(){
@@ -338,22 +376,28 @@
 
     function save(){
 
-        params = buildParams();
-        params['post_type'] = "test_type";
+        var valid = loadValidations();
 
-        var post_url = 'post_data';
+        if(valid) {
+            params = buildParams();
+            params['post_type'] = "test_type";
 
-        jQuery.ajax({url: post_url,
-                    type: "POST",
-                    data: params,
-                    success: function (response) {
-                        console.log(response);
-                       // window.location = '/config/test_types?title=User Accounts';
+            var post_url = 'post_data';
+            /*
+            jQuery.ajax({url: post_url,
+                        type: "POST",
+                        data: params,
+                        success: function (response) {
+                            window.location = '/config/test_types?title=Test Types';
+                        }
                     }
-                }
-        ).fail(function(xhr, status, error){
-                    alert(error);
-                });
+            ).fail(function(xhr, status, error){
+                        alert(error);
+                    });
+                    */
+        }else{
+            alert("nngngn")
+        }
     }
 
     function display(headerTitle, showSave){
@@ -528,6 +572,7 @@
                                 addButton.onclick = function(){
                                     var input = document.createElement("input");
                                     input.style.width = "40%";
+                                    input.className = "list-node";
                                     this.parentNode.insertBefore(input, this);
                                     this.parentNode.insertBefore(document.createTextNode(" / "), this);
                                 }
@@ -584,6 +629,7 @@
     }
 
     function getMeasuresTable(data){
+
         if (data){
             var table = document.createElement('table');
             table.id = "measure-table";
@@ -797,6 +843,8 @@
         addButton.onclick = function(){
             var input = document.createElement("input");
             input.style.width = "40%";
+            input.className = "list-node";
+
             this.parentNode.insertBefore(input, this);
             this.parentNode.insertBefore(document.createTextNode(" / "), this);
         }
@@ -888,7 +936,7 @@
                  input1.className = "min";
 
                  if (data["rangeLower"])
-                    input1.value = data["rangeLower"];
+                 input1.value = data["rangeLower"];
                  td.appendChild(input1);
 
                  var td = document.createElement("td");
@@ -936,7 +984,7 @@
                  row.appendChild(td);
 
                  var input2 = document.createElement("input");
-                 input2.className = "ageMax";
+                 input2.className = "age_max";
 
                  if(data["ageMax"])
                     input2.value = data["ageMax"];
@@ -953,10 +1001,13 @@ function buildParams(){
     var popup = __$("popup")
 
     data["tid"] = popup.getAttribute("tid");
-    data["cat_code"] = __$("cat_code").value;
-    data["t_name"] = __$("t_name").value;
-    data["desc"] = __$("desc").value;
-    data["hide_name"] = __$("name_hide").value;
+    data["cat_code"] = __$("cat_code").value.trim();
+    data["t_name"] = __$("t_name").value.trim();
+    data["desc"] = __$("desc").value.trim();
+    data["hide_name"] = __$("name_hide").value.trim();
+    data['loinc_code'] = __$('loinc').value.trim();
+    data['qty'] = __$('qty').value.trim();
+    data['s_unit'] = __$('s_unit').value.trim();
 
     var specimen_nodes = jQuery(".stype_entry:checked");
     data["specimen_types"] = [];
@@ -1041,6 +1092,13 @@ function extractValues(nodes, data, key){
     }
     return data;
 }
+
+    jQuery.validator.setDefaults({
+        debug: true,
+        success: "valid"
+    });
+
+
 
 </script>
 </html>

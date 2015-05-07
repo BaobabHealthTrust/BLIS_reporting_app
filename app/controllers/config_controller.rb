@@ -29,7 +29,7 @@ class ConfigController < ApplicationController
 
   def post_data
 
-    if params[:post_type] == ""
+    if params[:post_type] == "test_type"
       @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_test_type_save"]}"
     else
       @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["user_create_or_edit_link"]}"
@@ -49,6 +49,7 @@ class ConfigController < ApplicationController
 
       @ttype_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=#{table}&tid=#{params['tid']}"
       data = RestClient.get(@ttype_url)
+
       response[table] = JSON.parse(data) rescue data
     end
 
