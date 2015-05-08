@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'config/user_accounts'
   get 'config/test_types'
   get 'config/test_type_edit_popup'
+  get 'config/test_type_disable'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

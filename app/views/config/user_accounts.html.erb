@@ -1,20 +1,5 @@
 <style>
-  .even td {
-      border: 1px solid #ccc;
-      color: #333333;
-      background-color: #f9f9f9;
-      padding: 2px;
-      vertical-align: middle;
-  }
-
-  .odd td {
-      border: 1px solid #ccc;
-      color: #333333;
-      padding: 2px;
-      vertical-align: middle;
-  }
-
-  th {
+   th {
       border: 1px dotted #ccc !important;
   }
 
@@ -107,6 +92,24 @@
       background: lightblue !important;
   }
 
+  #data-container{
+      height: 78%;
+      overflow: auto;
+      background-color: white;
+  }
+
+    .even td, .odd td{
+        background-color: white !important;
+        border: 1px solid #ccc;
+        color: #333333;
+        padding: 4px;
+        vertical-align: middle;
+        border-radius: 5px !important;
+        -moz-border-radius: 5px !important;
+    }
+    thead th{
+        height: 30px !important;
+    }
 </style>
 <div id="shield">
 </div>
@@ -149,29 +152,32 @@
              <button onclick="search()" class="btn btn-default" type="button">Go!</button>
    </td>
  </tr></table>
-
-<table class='table table-striped table-hover' style='width:100%;'>
+<div id="data-container">
+<table id="h-th" class='table table-striped table-hover' style='width:100%; padding: 0px;margin:0px; height: 30px; background-color: #f9f9f9'>
   <thead>
       <tr valign='top'>
-        <th>
+        <th style="width: 3%">
           #
         </th>
-        <th>
+        <th style="width: 22%">
            Username
         </th>
 
-        <th>
+        <th style="width: 22%">
           Actual Name
         </th>
 
-        <th>
+        <th style="width: 22%">
            User Type
         </th>
         <th>
            Action(s)
         </th>
       </tr>
+    </thead>
+  </table>
 
+  <table class='table table-striped table-hover' style='width:100%;'>
   <% search_string = params[:search_string] || ""
 
      @users.delete_if{|u|
@@ -181,7 +187,7 @@
      (@users || []).each_with_index do |user, i|%>
 
       <tr id="<%= user['userId']%>" valign='top' class="<%= cycle('even', 'odd')%>">
-        <td>
+        <td style="width: 3%">
           <%= i + 1%>
         </td>
         <td style="width: 22%">
@@ -218,6 +224,7 @@
       </tr>
   <% end %>
 </table>
+  </div>
 </div>
 
 <script>

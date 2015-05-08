@@ -23,7 +23,11 @@ class ConfigController < ApplicationController
 
     test_types_link = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=test_types"
 
-    @data = RestClient.get(test_types_link) #rescue nil
+    @data = RestClient.get(test_types_link) rescue nil
+
+    test_status_link = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_tables"]}?table_type=disabled_status"
+
+    @disabledTests = JSON.parse(RestClient.get(test_status_link)) rescue nil
 
   end
 
@@ -54,5 +58,14 @@ class ConfigController < ApplicationController
     end
 
     render :text => response.to_json
+  end
+
+  def test_type_disable
+
+    url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["order_server_actions"]}?action=test_type_disable&tid=#{params['tid']}&enable=#{params['enable']}"
+
+    dt = RestClient.get(url)
+    data = JSON.parse(dt) rescue dt
+    render :text => data.to_json
   end
 end
