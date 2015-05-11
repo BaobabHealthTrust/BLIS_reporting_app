@@ -252,7 +252,7 @@
    </td>
 
    <td >
-            <input id='text' type="text" value="<%= params[:search_string]%>" class="form-control" placeholder="Search for...">
+            <input onchange="" id='text' type="text" value="<%= params[:search_string]%>" class="form-control" placeholder="Search for...">
    </td>
    <td style="padding-bottom: 10px;">
              <button onclick="search()" class="btn btn-default" type="button">Go!</button>
@@ -438,7 +438,9 @@
     }
 
     function search(){
-        window.location = '/config/test_types?title=Test Types&search_string=' + __$('text').value;
+
+        $('#sample_1 tr:contains("' + __$('text').value + '")').show();
+        $('#sample_1 tr:not(:contains("' + __$('text').value + '"))').css("display", "none");
     }
 
     function  cancel(){
@@ -1167,7 +1169,10 @@ function extractValues(nodes, data, key){
         success: "valid"
     });
 
-
+    jQuery.expr[':'].iContains = function(a, i, m) {
+        return jQuery(a).text().toUpperCase()
+                .indexOf(m[3].toUpperCase()) >= 0;
+    };
 
 </script>
 </html>
