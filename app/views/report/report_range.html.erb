@@ -24,7 +24,7 @@
 </style>
 
 <div id="mainPage" class="page">
-  <% if parms[:action] == 'tb_report'%>
+  <% if params[:action] == 'tb_report'%>
 <h2>Select year</h2>
   <div class="input-append date" id="datepicker" data-date="02-2012"
        data-date-format="yyyy">
@@ -35,11 +35,17 @@
   <br />
   <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
     <% else %>
+  <h2>Select report range</h2>
+  <div class="input-append date" id="datepicker" data-date="02-2012">
 
+    <input  id='year' type="text" value="<%= Date.today%>" readonly="readonly" name="date" >
+    <span class="add-on"><i class="icon-th"></i></span>
+  </div>
+  <br />
+  <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
     <% end %>
 </div>
  <script>
-
 
      $("#datepicker").datepicker( {
          format: " yyyy", // Notice the Extra space at the beginning
