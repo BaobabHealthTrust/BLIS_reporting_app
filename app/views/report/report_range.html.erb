@@ -1,0 +1,57 @@
+<%= javascript_include_tag "bootstrap-datepicker" %>
+<%= stylesheet_link_tag "datepicker" %>
+
+<script type="text/javascript">
+</script>
+
+<style type="text/css">
+    .finish {
+        margin-left: 30%;
+    }
+    .date{
+        margin-left: 30%;
+    }
+    .add-on{
+        margin-top: 1px;
+    }
+        body{
+            background-color: white !important;
+        }
+
+        #datepicker input{
+            font-size: 15px !important;
+        }
+</style>
+
+<div id="mainPage" class="page">
+  <% if parms[:action] == 'tb_report'%>
+<h2>Select year</h2>
+  <div class="input-append date" id="datepicker" data-date="02-2012"
+       data-date-format="yyyy">
+
+    <input  id='year' type="text" value="<%= Date.today.year%>" readonly="readonly" name="date" >
+    <span class="add-on"><i class="icon-th"></i></span>
+  </div>
+  <br />
+  <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
+    <% else %>
+
+    <% end %>
+</div>
+ <script>
+
+
+     $("#datepicker").datepicker( {
+         format: " yyyy", // Notice the Extra space at the beginning
+         viewMode: "years",
+         minViewMode: "years"
+     });
+
+     function buildReportTB(){
+
+        var year = document.getElementById('year').value;
+
+        window.location = "/report/tb_report?year=" + year;
+
+     }
+ </script>

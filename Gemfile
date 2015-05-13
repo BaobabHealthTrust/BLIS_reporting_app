@@ -32,6 +32,7 @@ gem 'mysql', '2.9.1'
 gem 'rest-client', '1.7.2'
 gem 'passenger', '5.0.5'
 gem 'activerecord-session_store', '0.1.1'
+#gem 'jspdf-rails', '1.0.3'
 #gem 'strong_parameters'
 
 # Use ActiveModel has_secure_password

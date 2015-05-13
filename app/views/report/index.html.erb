@@ -64,17 +64,27 @@ img {
 <div class="introList">
  
  <div class="img-container">
- <%1.upto(8).each do |r|
+ <%
    image = 'd_icon.jpeg' 
-   image = 'aggregate.png' if r.odd?
- %>  
-    <div class="introItem" onclick="window.location.href='/report/Stock movement'">
+   image = 'aggregate.png'
+ %>
+    <div class="introItem" onclick="window.location.href='/report/report_range?action=tb_report'">
       <img class="introIcon" src="/assets/Examples/<%=image%>">
       <div class="introItemText">
-        <div class="introItemHeader">Report <%=r%></div>
-        <div>View report number <%=r%> , to ........</div>
+        <div class="introItemHeader">TB microscopy report</div>
+        <div>lab report</div>
       </div>
     </div>
-  <%end%>
-</div>
 
+
+   <div class="introItem" onclick="window.location.href='/report/report_range?action=tb_monthy_or_quarterly_repor'">
+     <img class="introIcon" src="/assets/Examples/<%=image%>">
+     <div class="introItemText">
+       <div class="introItemHeader">Micro TB Monthly/Quarterly Report</div>
+       <div>lab report</div>
+     </div>
+   </div>
+
+ </div>
+ </div>
+ </div>

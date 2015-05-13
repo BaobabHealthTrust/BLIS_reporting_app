@@ -6,6 +6,7 @@ Rails.application.config.assets.precompile += %w( bootstrap.css )
 Rails.application.config.assets.precompile += %w( docs.css )
 Rails.application.config.assets.precompile += %w( prettify.css )
 Rails.application.config.assets.precompile += %w( bootstrap-responsive.css )
+Rails.application.config.assets.precompile += %w( datepicker.css )
 
 
 Rails.application.config.assets.precompile += %w( jquery.js )
@@ -14,6 +15,7 @@ Rails.application.config.assets.precompile += %w( bootstrap-tab.js )
 Rails.application.config.assets.precompile += %w( bootstrap.js )
 Rails.application.config.assets.precompile += %w( jquery.validate.min.js )
 Rails.application.config.assets.precompile += %w( additional-methods.min.js )
+Rails.application.config.assets.precompile += %w( bootstrap-datepicker.js )
 
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path

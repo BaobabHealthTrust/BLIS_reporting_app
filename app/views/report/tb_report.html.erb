@@ -1,0 +1,153 @@
+
+<script type="text/javascript" src="jspdf/jspdf.js"></script>
+<script type="text/javascript" src="jspdf/jspdf.plugin.standard_fonts_metrics.js"></script>
+<script type="text/javascript" src="jspdf/jspdf.plugin.split_text_to_size.js"></script>
+<script type="text/javascript" src="jspdf/jspdf.plugin.from_html.js"></script>
+
+<script type="text/javascript">
+</script>
+
+<style type="text/css">
+
+.page h3 {
+  color: #606060;
+  font-size: 14pt;
+  font-weight: normal;
+  margin-left: 20px;
+}
+
+.img-container {
+  width: 100%;
+  display: inline-block;
+}
+
+ #report{
+     background-color: white;
+     width: 80%;
+     height: 70%;
+     border-radius: 2px;
+     padding-top: 30px !important;
+ }
+
+ th{
+    vertical-align: middle !important;
+    padding: 15px !important;
+ }
+.r-header{
+    padding: 15px !important;
+ }
+.r-data{
+    padding: 15px !important;
+    background: white !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+ #caption{
+     width: 100%;
+     padding-left: 40%;
+     font-weight: bold;
+     padding-top: 20px !important;
+     font-size: 1.3em !important;
+ }
+
+ @media print{
+      .nav, .subnav, .no-print{
+          display: none !important;
+      }
+
+     .r-header, th, .r-data{
+         border: 0.5px solid !important;
+         padding: 3px !important;
+         padding-left: 8px;
+         padding-right: 8px;
+         height: 35px !important;
+     }
+
+     #report{
+         padding-top: 2px !important;
+         width: 100% !important;
+     }
+
+     #td-table{
+         width: 100% !important;
+     }
+     @page {
+         size: landscape;
+         margin: 0mm;
+     }
+
+  }
+
+</style>
+
+
+
+<div id="mainPage" class="page">
+
+<h3 class="no-print">TB Microscopy report</h3>
+</div>
+<div id="report">
+  <div class = 'no-print' style="width: 98%;margin: auto">
+    <div onclick='convert()' class="btn btn-success pull-right" style="width:80px;font-size:1.1em"> print </div>
+  </div>
+  <br />
+    <span id="caption"> TB Microscopy report JAN-DEC <%= @year%></span>
+    <table id='tb-table' class="table table-striped table-condensed table-bordered table-hover">
+          <thead>
+            <% @headers.each do |header|
+                header = '&nbsp' if header.blank?
+                %>
+                <th>
+                    <%= header.html_safe%>
+                </th>
+            <% end %>
+          </thead>
+          <tbody>
+          <% @rows.each do |row|%>
+            <tr>
+              <% @headers.each_with_index do |header, i|
+                if header.blank?
+              %>
+                  <td class="r-header">
+                    <%= row.html_safe %>
+                  </td>
+              <% else %>
+                  <td class="r-data">
+                    <%= @numerics[i][row] %>
+                  </td>
+              <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+          </tbody>
+    </table>
+
+ </div>
+ <script>
+
+   function printDiv() {
+       window.print();
+   }
+
+   function convert() {
+       var doc = new jsPDF('p', 'in', 'letter');
+       var source = $('#report');
+       var specialElementHandlers = {
+           '.no-print': function(element, renderer) {
+               return true;
+           }
+       };
+
+       doc.fromHTML(
+               $('#report').get(0), // [Refer Exact code tutorial][2]HTML string or DOM elem ref.
+               0.5,    // x coord
+               0.5,    // y coord
+               {
+                   'width': 7.5, // max width of content on PDF
+                   'elementHandlers': specialElementHandlers
+               });
+
+       doc.output('dataurl');
+   }
+
+ </script>
