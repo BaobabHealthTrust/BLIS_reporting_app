@@ -36,13 +36,19 @@
   <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
     <% else %>
   <h2>Select report range</h2>
-  <div class="input-append date" id="datepicker" data-date="02-2012">
+  <div class="input-append date" id="datepicker1" data-date="02-2012" data-date-format="dd-M-yyy">
+    <label> Start date </label>
+    <input  id='start_date' type="text" value="<%= Date.today%>" readonly="readonly" name="start_date" >
+    <span class="add-on"><i class="icon-th"></i></span>
+  </div>
 
-    <input  id='year' type="text" value="<%= Date.today%>" readonly="readonly" name="date" >
+  <div class="input-append date" id="datepicker2" data-date="02-2012" data-date-format="dd-M-yyyy">
+    <label> End date </label>
+    <input  id='end_date' type="text" value="<%= Date.today%>" readonly="readonly" name="end_date" >
     <span class="add-on"><i class="icon-th"></i></span>
   </div>
   <br />
-  <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
+  <div class="btn btn-success finish" onclick="buildReportTBMQ()">Finish</div>
     <% end %>
 </div>
  <script>
@@ -51,6 +57,14 @@
          format: " yyyy", // Notice the Extra space at the beginning
          viewMode: "years",
          minViewMode: "years"
+     });
+
+     $("#datepicker1").datepicker( {
+         dateFormat: "dd-M-yyyy"
+     });
+
+     $("#datepicker2").datepicker( {
+         dateFormat: "dd-M-yyyy"
      });
 
      function buildReportTB(){
