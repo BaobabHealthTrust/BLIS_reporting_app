@@ -1,2 +1,1062 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Map</title>
+<script type="text/javascript" src="/assets/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/assets/highcharts.js"></script>
+<script type="text/javascript" src="/assets/data/coords.js"></script>
+<script type="text/javascript" src="/assets/data/districts.js"></script>
+<script type="text/javascript" src="/assets/data/sites_by_zones.js"></script>
+<script type="text/javascript" src="/assets/data/zones.js"></script>
+<script type="text/javascript" src="/assets/data/district_offsets.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#diagnosis_one').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Brucellosis',
+                    data: [7.0, 6.9, 9.5, 14.5]
+                }
+            ]
+        });
+    });
+
+    $(function () {
+        $('#diagnosis_two').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Food Poisoning',
+                    data: [5.0, 8.9, 4.5, 3.5]
+                }
+            ]
+        });
+    });
+
+    $(function () {
+        $('#diagnosis_three').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Anthrax',
+                    data: [8.0, 5.9, 8.5, 4.5]
+                }
+            ]
+        });
+    });
+
+    $(function () {
+        $('#diagnosis_four').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Anthrax',
+                    data: [9.0, 6, 2.5, 1.5]
+                }
+            ]
+        });
+    });
+
+    $(function () {
+        $('#diagnosis_five').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Scarlet fever',
+                    data: [2.0, 4, 6.5, 9.5]
+                }
+            ]
+        });
+    });
+
+    $(function () {
+        $('#diagnosis_six').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '' + this.x + ' = <b>' + this.y + '</b> cases';
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'bottom',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: 'Acute encephalitis',
+                    data: [10.0, 7.4, 4, 2.5]
+                }
+            ]
+        });
+    });
+</script>
+<style>
+    body{
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .diagnosis_one{
+
+    }
+    .diagnosis_two{
+        width: 200px;
+    }
+    .diagnosis_three{
+        width: 200px;
+    }
+</style>
+</head>
+<body onresize="resize()" onload="resize()">
+<div class="row-fluid" style="width: 23%;">
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left" id="national_label">
+        MALAWI
+      </div>
+    </div>
+    <div class="block-content collapse in">
+      <div id="c_map">
+        <object id="map" type="image/svg+xml" data="/assets/Malawi.svg" style="height: 100%; width: 100%;"></object>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid" style="position: absolute; left:25%; top:10%; top:60px;">
+  <div class="span3">
+    <div class="block">
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Brucellosis
+        </div>
+      </div>
+      <div class="block-content collapse in">
+        <div id="diagnosis_one" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="block">
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Food poisoning
+        </div>
+      </div>
+      <div class="block-content collapse in">
+        <div id="diagnosis_two" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="block">
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Anthrax
+        </div>
+      </div>
+      <div class="block-content collapse in">
+        <div id="diagnosis_three" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row-fluid" style="position: absolute; left:25%; top:275px;">
+  <div class="span3">
+    <div class="block">
+      <div class="block-content collapse in">
+        <div id="diagnosis_four" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Acute meningitis
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="block">
+      <div class="block-content collapse in">
+        <div id="diagnosis_five" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Scarlet fever
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="block">
+      <div class="block-content collapse in">
+        <div id="diagnosis_six" style="height:130px !important; width:350px;">
+        </div>
+      </div>
+      <div class="navbar navbar-inner block-header">
+        <div class="muted pull-right" id="district_label">
+          Acute encephalitis
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid" style="position: absolute; left:25%; top:467px; width:74.3%;">
+  <!-- block -->
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Cases</div>
+    </div>
+    <div class="block-content collapse in">
+      <div style="width:100%;">
+        <table class="table table-bordered">
+          <tbody>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Rabies</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Food Poisoning</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Brucellosis</a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Smallpox</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Acute meningitis</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Enteric fever</a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Tuberculosis</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Tetanus</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> SARS</a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Diabetes</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Hypertension</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Whooping cough</a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Measles</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Accidents</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Yellow fever</a></td>
+          </tr>
+          <tr>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Influenza</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,000</span> Diphtheria</a></td>
+            <td><a href="#"><span class="badge badge-info pull-right">1,234</span> Leprosy</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- /block -->
+</div>
+
+
+<script>
+
+    var refPoints = [-9.331537, -17.158189, 32.674051, 35.969950];
+    var offsets = [10, 295, 10, 710];
+    var limits = [305, 720];
+    var previous;
+
+    function __$(id) {
+        return document.getElementById(id);
+    }
+
+    function latLon2Coord(lat, lon) {
+
+        var x, y;
+
+        x = ((offsets[1] - offsets[0]) * ((Math.abs(lon) - Math.abs(refPoints[2])) / (Math.abs(refPoints[3]) - Math.abs(refPoints[2])))) // + offsets[0];
+
+        y = ((offsets[3] - offsets[2]) * ((Math.abs(lat) - Math.abs(refPoints[0])) / (Math.abs(refPoints[1]) - Math.abs(refPoints[0])))) // + offsets[2];
+
+        return [x, y]
+
+    }
+
+    function resize() {
+        if (__$("main")) {
+            __$("main").style.height = (window.innerHeight - 20) + "px";
+        }
+
+        if (__$("c_map")) {
+            __$("c_map").style.height = (window.innerHeight - 20) + "px";
+        }
+
+        if (__$("c_district")) {
+            __$("c_district").style.height = ((window.innerHeight / 2) - 20) + "px";
+        }
+
+        if (__$("c_district")) {
+            __$("c_district").style.width = ((window.innerWidth / 2) - 20) + "px";
+        }
+
+        if (__$("c_zone")) {
+            __$("c_zone").style.height = ((window.innerHeight / 2) - 12) + "px";
+        }
+
+        if (__$("c_zone")) {
+            __$("c_zone").style.width = ((window.innerWidth / 2) - 20) + "px";
+        }
+
+        if (__$("container")) {
+            __$("container").style.height = (window.innerHeight - 320) + "px";
+        }
+    }
+
+    function setDefaults() {
+
+        var svg = __$("map").contentDocument;
+
+        if (svg == null) {
+
+            setTimeout("setDefaults()", 200);
+
+            return;
+
+        }
+
+        var elements = ["chitipa", "karonga", "rumphi", "mzimba", "nkhatabay", "nkhotakota", "salima", "kasungu", "dedza",
+            "lilongwe", "ntchisi", "ntcheu", "mchinji", "dowa", "balaka", "zomba", "machinga", "blantyre", "machinga",
+            "chiradzulu", "chikwawa", "nsanje", "neno", "mwanza", "phalombe", "mulanje", "likoma", "thyolo", "mangochi"]
+
+        for (var i = 0; i < elements.length; i++) {
+
+            if (svg.getElementById(elements[i])) {
+
+                svg.getElementById(elements[i]).onmouseover = function () {
+                    this.setAttribute("title", this.id.capitalize())
+                    this.setAttribute("style", "fill:#ffcccc;stroke:#6e6e6e;stroke-width:0.40000001000000002;fill-opacity:1");
+                }
+
+                svg.getElementById(elements[i]).onmouseout = function () {
+                    this.setAttribute("style", "fill:#ffffff;stroke:#6e6e6e;stroke-width:0.40000001000000002;fill-opacity:1");
+                }
+
+                svg.getElementById(elements[i]).onclick = function () {
+
+                    //drawBorder(this.id);
+
+                }
+
+            }
+        }
+
+        // loadSites();
+    }
+
+    function insertSite(x, y, color, id) {
+        var doc = __$("map").contentDocument;
+
+        var mw = doc.getElementById("malawi");
+
+        var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+        circle.setAttribute("cx", x);
+
+        circle.setAttribute("cy", y);
+
+        circle.setAttribute("r", 2);
+
+        circle.setAttribute("id", id);
+
+        circle.setAttribute("fill", color);
+
+        circle.setAttribute("stroke", "black");
+
+        mw.appendChild(circle);
+    }
+
+    function insertSiteByOffset(x, y, color, id, district) {
+
+        var doc = __$("district").contentDocument;
+
+        var mw = doc.getElementById(district);
+
+        var target = districtOffsets[district];
+
+        var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+        circle.setAttribute("cx", (x - target.x));
+
+        circle.setAttribute("cy", (y - target.y));
+
+        circle.setAttribute("r", 2);
+
+        circle.setAttribute("id", id);
+
+        circle.setAttribute("fill", color);
+
+        circle.setAttribute("stroke", "black");
+
+        mw.appendChild(circle);
+    }
+
+    function insertZoneSiteByOffset(x, y, color, id, district) {
+
+        var doc = __$("zone").contentDocument;
+
+        var mw = doc.getElementById(district);
+
+        var target = districtOffsets[district];
+
+        var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+        circle.setAttribute("cx", (x - target.x));
+
+        circle.setAttribute("cy", (y - target.y));
+
+        circle.setAttribute("r", 2);
+
+        circle.setAttribute("id", id);
+
+        circle.setAttribute("fill", color);
+
+        circle.setAttribute("stroke", "black");
+
+        mw.appendChild(circle);
+    }
+
+    function loadSites() {
+
+        for (var i = 0; i < sites.length; i++) {
+
+            var result = latLon2Coord(sites[i][0], sites[i][1])
+
+            var colors = ["rgba(255,0,0,0.9)", "rgba(0,200,0,0.9)", "rgba(0,0,200,0.9)"];
+
+            var pos = Math.round((Math.random() * 10)) % 3;
+
+            insertSite(result[0], result[1], colors[pos], 'site' + i);
+
+        }
+
+    }
+
+    var uCoords = {};
+
+    function getCoords() {
+
+        var svg = __$("map").contentDocument;
+
+        var elements = ["chitipa", "karonga", "rumphi", "mzimba", "nkhatabay", "nkhotakota", "salima", "kasungu", "dedza",
+            "lilongwe", "ntchisi", "ntcheu", "mchinji", "dowa", "balaka", "zomba", "machinga", "blantyre", "machinga",
+            "chiradzulu", "chikwawa", "nsanje", "neno", "mwanza", "phalombe", "mulanje", "likoma", "thyolo", "mangochi"];
+
+        for (var i = 0; i < elements.length; i++) {
+
+            if (svg.getElementById(elements[i])) {
+
+                var element = svg.getElementById(elements[i]);
+
+                var district = {};
+
+                for (var j = 0; j < element.children.length; j++) {
+
+                    if (element.children[j].tagName.match(/desc/i)) {
+
+                        for (var k = 0; k < element.children[j].children.length; k++) {
+
+                            district[element.children[j].children[k].tagName.replace(/namespace\:/i, "")] = element.children[j].children[k].innerHTML;
+
+                        }
+
+                    }
+
+                }
+
+                uCoords[elements[i]] = district;
+
+            }
+        }
+
+    }
+
+    function loadDistricts() {
+
+        var elements = ["chitipa", "karonga", "rumphi", "mzimba", "nkhatabay", "nkhotakota", "salima", "kasungu", "dedza",
+            "lilongwe", "ntchisi", "ntcheu", "mchinji", "dowa", "balaka", "zomba", "machinga", "blantyre", "machinga",
+            "chiradzulu", "chikwawa", "nsanje", "neno", "mwanza", "phalombe", "mulanje", "likoma", "thyolo", "mangochi"];
+
+        for (var i = 0; i < elements.length; i++) {
+
+            var district = districts[elements[i]];
+
+            if (!district)
+                continue;
+
+            var result = latLon2Coord(district["lat"], district["lon"])
+
+            var colors = ["rgba(255,0,0,0.9)", "rgba(0,200,0,0.9)", "rgba(0,0,200,0.9)"];
+
+            var pos = Math.round((Math.random() * 10)) % 3;
+
+            insertSite(result[0], result[1], colors[0], 0);
+
+        }
+
+    }
+
+    function drawBorders() {
+
+        var svg = __$("map").contentDocument;
+
+        var elements = ["chitipa", "karonga", "rumphi", "mzimba", "nkhatabay", "nkhotakota", "salima", "kasungu", "dedza",
+            "lilongwe", "ntchisi", "ntcheu", "mchinji", "dowa", "balaka", "zomba", "machinga", "blantyre", "machinga",
+            "chiradzulu", "chikwawa", "nsanje", "neno", "mwanza", "phalombe", "mulanje", "likoma", "thyolo", "mangochi"];
+
+        for (var i = 0; i < elements.length; i++) {
+
+            var element = svg.getElementById(elements[i]).getBBox();
+
+            var rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            rect.setAttributeNS(null, 'x', element.x);
+            rect.setAttributeNS(null, 'y', element.y);
+            rect.setAttributeNS(null, 'height', element.height);
+            rect.setAttributeNS(null, 'width', element.width);
+            rect.setAttributeNS(null, 'stroke', 'red');
+            rect.setAttributeNS(null, 'fill', 'none');
+            rect.setAttributeNS(null, 'id', 'rect' + elements[i]);
+            svg.getElementById("malawi").appendChild(rect);
+
+        }
+    }
+
+    function drawBorder(district) {
+
+        var names = {
+            "chitipa": "Chitipa",
+            "karonga": 'Karonga',
+            "rumphi": 'Rumphi',
+            "mzimba": "Mzimba",
+            "nkhatabay": "Nkhata Bay",
+            "nkhotakota": "Nkhotakota",
+            "salima": "Salima",
+            "kasungu": "Kasungu",
+            "dedza": "Dedza",
+            "lilongwe": "Lilongwe",
+            "ntchisi": "Ntchisi",
+            "ntcheu": "Ntcheu",
+            "mchinji": "Mchinji",
+            "dowa": "Dowa",
+            "balaka": "Balaka",
+            "zomba": "Zomba",
+            "machinga": "Machinga",
+            "blantyre": "Blantyre",
+            "machinga": "Machinga",
+            "chiradzulu": "Chiradzulu",
+            "chikwawa": "Chikwawa",
+            "nsanje": "Nsanje",
+            "neno": "Neno",
+            "mwanza": "Mwanza",
+            "phalombe": "Phalombe",
+            "mulanje": "Mulanje",
+            "likoma": "Likoma",
+            "thyolo": "Thyolo",
+            "mangochi": "Mangochi"
+        };
+
+        var svg = __$("map").contentDocument;
+
+        if (svg.getElementById('rect' + district)) {
+
+            unloadDistrictSites(district);
+
+            svg.getElementById("malawi").removeChild(svg.getElementById('rect' + district));
+
+        } else {
+
+            var element = svg.getElementById(district).getBBox();
+
+            var rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            rect.setAttributeNS(null, 'x', element.x);
+            rect.setAttributeNS(null, 'y', element.y);
+            rect.setAttributeNS(null, 'height', element.height);
+            rect.setAttributeNS(null, 'width', element.width);
+            rect.setAttribute('stroke', 'none');     //'rgba(128,128,128,0.5)');
+            rect.setAttribute('fill', 'none');
+            rect.setAttribute('id', 'rect' + district);
+            svg.getElementById("malawi").appendChild(rect);
+
+            if (svg.getElementById('cursor')) {
+
+                var cursor = svg.getElementById('cursor');
+
+                cursor.setAttributeNS(null, 'x', element.x);
+                cursor.setAttributeNS(null, 'y', element.y);
+                cursor.setAttributeNS(null, 'height', element.height);
+                cursor.setAttributeNS(null, 'width', element.width);
+
+            } else {
+
+                var cursor = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+                cursor.setAttributeNS(null, 'x', element.x);
+                cursor.setAttributeNS(null, 'y', element.y);
+                cursor.setAttributeNS(null, 'height', element.height);
+                cursor.setAttributeNS(null, 'width', element.width);
+                cursor.setAttribute('stroke', 'rgba(255,0,0,0.8)');
+                cursor.setAttribute('fill', 'none');
+                cursor.setAttribute('id', 'cursor');
+                svg.getElementById("malawi").appendChild(cursor);
+
+            }
+
+            __$("district").outerHTML = __$("district").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/' + district + '.svg"')
+
+            var target = sites_by_zones[district];
+
+            switch (target[0]["region"]) {
+                case "North":
+                    __$("zone").outerHTML = __$("zone").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/zone_northern.svg"');
+
+                    setTimeout("loadZoneSitesByOffsets('zone_northern')", 500);
+
+                    break;
+                case "Central":
+                    if (target[0]["zone"] == "Central East") {
+
+                        __$("zone").outerHTML = __$("zone").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/zone_c_east.svg"')
+
+                        setTimeout("loadZoneSitesByOffsets('zone_c_east')", 500);
+
+                    } else if (target[0]["zone"] == "Central West") {
+
+                        __$("zone").outerHTML = __$("zone").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/zone_c_west.svg"')
+
+                        setTimeout("loadZoneSitesByOffsets('zone_c_west')", 500);
+
+                    }
+                    break;
+                case "South":
+                    if (target[0]["zone"] == "South East") {
+
+                        __$("zone").outerHTML = __$("zone").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/zone_s_east.svg"')
+
+                        setTimeout("loadZoneSitesByOffsets('zone_s_east')", 500);
+
+                    } else if (target[0]["zone"] == "South West") {
+
+                        __$("zone").outerHTML = __$("zone").outerHTML.replace(/data="(.+?)"/, 'data="/assets/mw/zone_s_west.svg"')
+
+                        setTimeout("loadZoneSitesByOffsets('zone_s_west')", 500);
+
+                    }
+                    break;
+            }
+
+            if (previous != undefined) {
+                unloadDistrictSites(previous);
+            }
+
+            previous = district;
+
+            loadDistrictSites(district);
+
+            setTimeout("loadDistrictSitesByOffsets('" + district + "')", 500);
+
+            if(__$("national_label")){
+
+                __$("national_label").innerHTML = names[district];
+
+            }
+
+            if(__$("district_label")){
+
+                __$("district_label").innerHTML = names[district];
+
+            }
+
+        }
+
+    }
+
+    function loadDistrictSitesByOffsets(district) {
+
+        var target = sites_by_zones[district];
+
+        for (var i = 0; i < target.length; i++) {
+
+            var result = latLon2Coord(target[i]["latitude"], target[i]["longitude"])
+
+            var colors = ["rgba(255,0,0,0.9)", "rgba(0,200,0,0.9)", "rgba(0,0,200,0.9)"];
+
+            var pos = 0;    // Math.round((Math.random() * 10)) % 3;
+
+            insertSiteByOffset(result[0], result[1], colors[pos], district + '_' + target[i]["facility_id"], district);
+
+        }
+
+    }
+
+    function loadZoneSitesByOffsets(district) {
+        var zone, region;
+
+        switch (district) {
+            case "zone_northern":
+                zone = "Northern";
+                region = "North";
+                break;
+            case "zone_c_east":
+                region = "Central";
+                zone = "Central East";
+                break;
+            case "zone_c_west":
+                region = "Central";
+                zone = "Central West";
+                break;
+            case "zone_s_east":
+                region = "South";
+                zone = "South East";
+                break;
+            case "zone_s_west":
+                region = "South";
+                zone = "South West";
+                break;
+        }
+
+        if (zone == undefined || region == undefined) return;
+
+        var zone_districts = Object.keys(zones[region][zone]);
+
+        for (var s = 0; s < zone_districts.length; s++) {
+
+            var target = sites_by_zones[zone_districts[s]];
+
+            for (var i = 0; i < target.length; i++) {
+
+                var result = latLon2Coord(target[i]["latitude"], target[i]["longitude"])
+
+                var colors = ["rgba(255,0,0,0.9)", "rgba(0,200,0,0.9)", "rgba(0,0,200,0.9)"];
+
+                var pos = 0;    // Math.round((Math.random() * 10)) % 3;
+
+                insertZoneSiteByOffset(result[0], result[1], colors[pos], district + '_' + target[i]["facility_id"], district);
+
+            }
+
+        }
+
+        if(__$("zone_label")){
+
+            __$("zone_label").innerHTML = zone + " Zone";
+
+        }
+
+    }
+
+    function loadDistrictSites(district) {
+
+        var target = sites_by_zones[district];
+
+        for (var i = 0; i < target.length; i++) {
+
+            var result = latLon2Coord(target[i]["latitude"], target[i]["longitude"])
+
+            var colors = ["rgba(255,0,0,0.9)", "rgba(0,200,0,0.9)", "rgba(0,0,200,0.9)"];
+
+            var pos = 0;    // Math.round((Math.random() * 10)) % 3;
+
+            insertSite(result[0], result[1], colors[pos], target[i]["facility_id"]);
+
+        }
+
+    }
+
+    function unloadDistrictSites(district) {
+
+        var target = sites_by_zones[district];
+
+        var doc = __$("map").contentDocument;
+
+        var mw = doc.getElementById("malawi");
+
+        for (var i = 0; i < target.length; i++) {
+
+            if (doc.getElementById(target[i]["facility_id"])) {
+
+                mw.removeChild(doc.getElementById(target[i]["facility_id"]));
+
+            }
+
+        }
+
+    }
+
+    function getDistrictOffsets() {
+
+        var svg = __$("map").contentDocument;
+
+        var elements = ["chitipa", "karonga", "rumphi", "mzimba", "nkhatabay", "nkhotakota", "salima", "kasungu", "dedza",
+            "lilongwe", "ntchisi", "ntcheu", "mchinji", "dowa", "balaka", "zomba", "machinga", "blantyre", "machinga",
+            "chiradzulu", "chikwawa", "nsanje", "neno", "mwanza", "phalombe", "mulanje", "likoma", "thyolo", "mangochi"];
+
+        for (var i = 0; i < elements.length; i++) {
+
+            var element = svg.getElementById(elements[i]).getBBox();
+
+            districtOffsets[elements[i]] = {
+                'x': element.x,
+                'y': element.y,
+                'height': element.height,
+                'width': element.width
+            }
+        }
+
+    }
+
+    setDefaults();
+
+</script>
+</body>
+</html>

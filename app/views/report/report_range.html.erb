@@ -36,15 +36,15 @@
   <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
     <% else %>
   <h2>Select report range</h2>
-  <div class="input-append date" id="datepicker1" data-date="02-2012" data-date-format="dd-M-yyy">
+  <div class="input-append date" id="datepicker1" data-date="02-2012" >
     <label> Start date </label>
-    <input  id='start_date' type="text" value="<%= Date.today%>" readonly="readonly" name="start_date" >
+    <input  id='start_date' type="text"  readonly="readonly" name="start_date" >
     <span class="add-on"><i class="icon-th"></i></span>
   </div>
-
-  <div class="input-append date" id="datepicker2" data-date="02-2012" data-date-format="dd-M-yyyy">
+<br />
+  <div class="input-append date" id="datepicker2" data-date="02-2012">
     <label> End date </label>
-    <input  id='end_date' type="text" value="<%= Date.today%>" readonly="readonly" name="end_date" >
+    <input  id='end_date' type="text"  readonly="readonly" name="end_date" >
     <span class="add-on"><i class="icon-th"></i></span>
   </div>
   <br />
@@ -54,18 +54,19 @@
  <script>
 
      $("#datepicker").datepicker( {
-         format: " yyyy", // Notice the Extra space at the beginning
+         format: " yyyy",
          viewMode: "years",
          minViewMode: "years"
      });
 
      $("#datepicker1").datepicker( {
-         dateFormat: "dd-M-yyyy"
+         format: 'dd/mm/yyyy'
      });
 
      $("#datepicker2").datepicker( {
-         dateFormat: "dd-M-yyyy"
+         format: 'dd/mm/yyyy'
      });
+
 
      function buildReportTB(){
 
@@ -74,4 +75,31 @@
         window.location = "/report/tb_report?year=" + year;
 
      }
+
+     function buildReportTBMQ(){
+
+         var start_date = document.getElementById('start_date').value;
+         var end_date = document.getElementById('end_date').value;
+
+         window.location = "/report/tb_report_mq?start_date=" + start_date + "&end_date=" + end_date;
+
+     }
+
+     function loadValidations(){
+         var nodes = $("input")
+         for (var i = 0; i < nodes.length; i ++){
+             $(nodes[i]).attr("name", ("temp_" + i));
+         }
+
+         $("input").attr({
+             'required': true
+         })
+
+         var form = $( "#div" );
+
+         form.validate();
+
+         return form.valid();
+     }
+
  </script>
