@@ -5,6 +5,10 @@
 </script>
 
 <style type="text/css">
+    .error{
+        color: red;
+        position: fixed;
+    }
     .finish {
         margin-left: 30%;
     }
@@ -22,35 +26,36 @@
             font-size: 15px !important;
         }
 </style>
+<form id="form1">
+    <div id="mainPage" class="page">
+      <% if params['actionn'] == 'tb_report'%>
+    <h2>Select year</h2>
+      <div class="input-append date" id="datepicker" data-date="02-2012"
+           data-date-format="yyyy">
 
-<div id="mainPage" class="page">
-  <% if params['actionn'] == 'tb_report'%>
-<h2>Select year</h2>
-  <div class="input-append date" id="datepicker" data-date="02-2012"
-       data-date-format="yyyy">
-
-    <input  id='year' type="text" value="<%= Date.today.year%>" readonly="readonly" name="date" >
-    <span class="add-on"><i class="icon-th"></i></span>
-  </div>
-  <br />
-  <div class="btn btn-success finish" onclick="buildReportTB()">Finish</div>
-    <% else %>
-  <h2>Select report range</h2>
-  <div class="input-append date" id="datepicker1" data-date="02-2012" >
-    <label> Start date </label>
-    <input  id='start_date' type="text"  readonly="readonly" name="start_date" >
-    <span class="add-on"><i class="icon-th"></i></span>
-  </div>
-<br />
-  <div class="input-append date" id="datepicker2" data-date="02-2012">
-    <label> End date </label>
-    <input  id='end_date' type="text"  readonly="readonly" name="end_date" >
-    <span class="add-on"><i class="icon-th"></i></span>
-  </div>
-  <br />
-  <div class="btn btn-success finish" onclick="buildReportTBMQ()">Finish</div>
-    <% end %>
-</div>
+        <input id='year' type="text" name="date" >
+        <span class="add-on"><i class="icon-th"></i></span>
+      </div>
+      <br />
+      <div class="btn btn-success finish" onclick="loadValidationsTB()">Finish</div>
+        <% else %>
+      <h2>Select report range</h2>
+      <div class="input-append date" id="datepicker1" data-date="02-2012" name="dp1">
+        <label> Start date </label>
+        <input  id='start_date' type="text"  name="start_date" >
+        <span class="add-on"><i class="icon-th"></i></span>
+      </div>
+    <br />
+      <div class="input-append date" id="datepicker2" data-date="02-2012" name="dp2">
+        <label> End date </label>
+        <input  id='end_date' type="text"   name="end_date" >
+        <span class="add-on"><i class="icon-th"></i></span>
+      </div>
+      <br />
+      <div class="btn btn-success finish" onclick="loadValidationsTBMQ()">Finish</div>
+        <% end %>
+    </div>
+  </form>
  <script>
 
      $("#datepicker").datepicker( {
@@ -85,21 +90,49 @@
 
      }
 
-     function loadValidations(){
-         var nodes = $("input")
-         for (var i = 0; i < nodes.length; i ++){
-             $(nodes[i]).attr("name", ("temp_" + i));
-         }
+     function loadValidationsTB(){
+
+         var year = document.getElementById('year').value;
+         $("#year").val(year.trim());
 
          $("input").attr({
-             'required': true
+             'required': true,
+             'number': true,
+             'range': [2014, (new Date()).getFullYear()]
          })
 
-         var form = $( "#div" );
+         var form = $( "#form1" );
 
          form.validate();
 
-         return form.valid();
+         var check = form.valid();
+
+         if (check){
+             buildReportTB()
+         }
      }
+
+     function loadValidationsTBMQ(){
+
+         $("input").attr({
+             'required': true,
+             'date': true
+         })
+
+         var form = $( "#form1" );
+
+         form.validate();
+
+         var check = form.valid();
+
+         if (check){
+             buildReportTBMQ()
+         }
+     }
+
+     jQuery.validator.setDefaults({
+         debug: true,
+         success: "valid"
+     });
 
  </script>
