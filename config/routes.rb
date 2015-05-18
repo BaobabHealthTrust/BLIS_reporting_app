@@ -19,10 +19,11 @@ Rails.application.routes.draw do
   get 'user/login'
   post 'user/authenticate'
   get 'config/index'
-  
+
   get 'config/post_data'
   post 'config/post_data'
   get 'config/user_accounts'
+  get 'config/account_edit'
   get 'config/test_types'
   get 'config/test_type_edit_popup'
   get 'config/test_type_disable'
