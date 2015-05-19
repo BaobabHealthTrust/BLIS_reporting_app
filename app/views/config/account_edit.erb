@@ -255,17 +255,13 @@
         table.vAlign = 'top';
         table.className = "table";
 
-        if (userId == -1) {
-            var requiredDefaults = ['', '', '', '5', '', '', '', 0];
-            var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
-            var displayFields = ['Username', 'Actual Name', 'Password', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
-            var controlType = ['text', 'text', 'password', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
-        }else{
-            var requiredDefaults = ['', '', '', '5', '', '', '', 0];
-            var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
-            var displayFields = ['Username', 'Actual Name', 'New Password (optional)', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
-            var controlType = ['text', 'text', 'password', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
-        }
+
+        var requiredDefaults = ['', '', '', '5', '', '', '', 0];
+        var requiredFields = ['username', 'actualName', 'password', 'level', 'labSection', 'email', 'phone', 'canverify'];
+        var displayFields = ['Username', 'Actual Name', 'New Password (optional)', 'User Type', 'Lab Section', 'Email', 'Phone Number', 'Can Verify Results'];
+        var controlType = ['text', 'text', 'password', 'select-single', 'select-multiple', 'text', 'text', 'checkbox'];
+        var displayType = ['', '', '', 'none', 'none', '', '', 'none'];
+
 
         for(var i = 0; i < requiredFields.length; i++){
 
@@ -314,6 +310,8 @@
             }else{
                 cell2.innerHTML = value;
             }
+            if (displayType[i] != '')
+                row.style.display = displayType[i];
 
             row.appendChild(cell2);
         }
