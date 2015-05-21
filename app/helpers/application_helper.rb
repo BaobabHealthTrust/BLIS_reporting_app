@@ -1,6 +1,6 @@
 module ApplicationHelper
   def app_name
-    'LIMS'
+    "LIMS <span class='version'> #{version}</span>".html_safe
   end
 
   def organization_name
@@ -43,4 +43,7 @@ EOF
     end
   end
 
+  def version
+    return `git describe`.gsub(/\n/, '')
+  end
 end
