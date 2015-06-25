@@ -1,0 +1,433 @@
+<html>
+<head>
+  <%= javascript_include_tag 'spin' %>
+  <script>
+
+        var spinner;
+
+
+        function __$(id){
+
+            return document.getElementById(id);
+
+        }
+
+        function spin() {
+
+            var div = document.createElement("div");
+
+            $(div).css({'position' : "absolute", 'left' : '47%', 'top' : '47%'})
+
+            div.id = "spin";
+
+            document.body.appendChild(div);
+
+            var opts = { lines: 15, length: 10, width: 4, radius: 10, corners: 1, rotate: 0,
+            color: '#000', speed: 2, trail: 60, shadow: false, hwaccel: false,
+            className: 'spinner', zIndex: 2e9,
+            top: 25, left: 25
+            };
+
+            if (__$("text")){
+
+                __$("text").setAttribute("disabled", "disabled");
+
+            }
+
+            spinner = new Spinner(opts).spin(div);
+
+        }
+
+        function removeSpinner(){
+
+            if (__$("text")){
+
+                __$("text").removeAttribute("disabled");
+
+            }
+
+            spinner.stop();
+
+            $("#spin").remove();
+
+        }
+
+  </script>
+
+<style>
+   body{
+       color:#333333;
+       font-family:  "Helvetica Neue",Helvetica,Arial,sans-serif;
+   }
+    .hor-minimalist-b .error{
+        position: absolute;
+        z-index: 1000;
+
+    }
+    #h-th{
+        margin: 0px !important;
+    }
+
+    #sample_1 td{
+        background-color: white;
+        border-radius: 5px;
+        border-width: 0.5px !important;
+        padding-left: 12.5px;
+        font-size: 14px;
+    }
+
+    th {
+        border: 1px dotted #ccc !important;
+    }
+
+    #h-th th{
+        border: 0px white !important;
+    }
+    .action  {
+        background-color: white !important;
+        border: none !important;
+    }
+
+    .btn{
+        font-size: 14px;
+        width: 90px !important;
+        min-width: 90px !important;
+    }
+
+    .gray{
+        opacity: 0.3 !important;
+    }
+
+    .uni{
+        min-width: 70px;
+    }
+
+    .no-margin{
+        margin: 0px !important;
+        width: 50% !important;
+    }
+    #new_category_textbox{
+        width: 30%;
+    }
+
+    #shield{
+        position: absolute;
+        z-index: 2000;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background: gray;
+        opacity: 0.7;
+        display: none;
+    }
+
+    #popup{
+        position: fixed;
+        z-index: 2001;
+        left: 25%;
+        width: 700px;
+        max-width: 700px;
+        top: 50px !important;
+        height: 700px !important;
+        background-color: whitesmoke;
+        border: 1.5px solid darkslategray;
+        opacity: 1 !important;
+        display: none;
+    }
+
+    #popup-header{
+        background-color: whitesmoke;
+        height: 30px;
+        font-size: 120%;
+        border-radius: 8px;
+    }
+    #content{
+        height: 610px;
+        width: 700px;
+    }
+    #popup-content{
+        height: 610px !important;
+        width: 700px;
+        overflow-y: auto;
+        background: white;
+    }
+    #popup-footer{
+        height: 30px;
+        background-color: whitesmoke;
+        border-top: 1px solid lightgray;
+    }
+
+    #table-content{
+        margin-top: 5px;
+        padding-top:5px;
+        width: 100%
+    }
+
+    td{
+        vertical-align: middle !important;
+    }
+
+    .data{
+        padding-top: 5px !important;
+        vertical-align: top !important;
+    }
+
+    #popup .table td{
+        padding: 3px !important;
+    }
+
+    .header td{
+        width: 60px !important;
+        font-size: 12px;
+        background: lightgray;
+        border: 1px dotted white !important;
+        text-align: center;
+    }
+
+    .success-col{
+        width: 110px !important;
+    }
+    #data-container{
+        height: 78%;
+        overflow: auto;
+    }
+     #h-th th{
+         padding-left: 12.5px;
+     }
+
+</style>
+</head>
+<body>
+
+<form id = "popup">
+  <table style="width:700px;height:700px;">
+    <tr >
+      <th id="popup-header">
+        Header
+      </th>
+    </tr>
+    <tr>
+      <td id="content">
+        <div id="popup-content">
+
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td id="popup-footer">
+        <a id="btn-save" style="width:12%" class="btn btn-success pull-right" href="javascript:hidePopup();">Ok</a>
+      </td>
+    </tr>
+  </table>
+
+</form>
+
+  <div id="mainPage" class="page" style='width:95%;'>
+    <h3> <%= params[:title]%> </h3>
+    <p style="text-align: right;">
+      <a href="" rel="facebox">Page Help</a>
+    </p>
+
+    <table style="width: 100%;"><tr>
+      <td style="width:85%;">
+
+      </td>
+
+      <td >
+        <input onchange='search()' id='text' type="text" value="" class="form-control" placeholder="Search for...">
+      </td>
+      <td style="padding-bottom: 10px;">
+        <button onclick="search()" class="btn btn-default" type="button">Go!</button>
+      </td>
+    </tr>
+      <table id = 'h-th' style="width: 100%;border-spacing:0;" class="table table-striped table-condensed table-bordered table-hover" border-spacing="0">
+        <thead>
+        <tr>
+
+          <th>Name</th>
+          <th>Acc. #</th>
+          <th>Sample type</th>
+          <th>Tests ordered</th>
+          <th>Last updated</th>
+          <th>Recent state</th>
+          <th>Recent attendant</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+      </table>
+    </table>
+    <div id="data-container">
+        <table id="sample_1" class="table table-striped table-condensed table-bordered table-hover" style="width:100%">
+            <tbody id = 'rows'>
+            <% @data.each do |order|%>
+            <tr class="data-row">
+
+                <td style="width:16%"> <%= order['pname']%> </td>
+                <td style="width:10%"> <%= order['accession_number'].strip%> </td>
+                <td style="width:12%"> <%= order['sample_type'].strip%> </td>
+                <td style="width:14.5%"> <%= order['test_types'].split(',, ').uniq.join(', ')%> </td>
+                <td style="width:10%"> <%= order['recent_date'].to_date.strftime("%d-%b-%Y")%> </td>
+                <td style="width:14%"> <%= order['state'].strip%> </td>
+                <td style="width:15%"> <%= order['recent_doc'].gsub(/\(\d*\)|/, '')%> </td>
+                <td  class="success-col"> <a class="btn btn-success" type='button warning' href='javascript:buildEditPopup("<%= order['accession_number'].strip%>")'>
+                  View Details
+                </a> </td>
+            </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+  </div>
+<div id="shield">
+</div>
+
+</body>
+<script>
+
+    var frow = __$("sample_1").getElementsByTagName('tr')[1].getElementsByTagName("td");
+    var hrow = __$("h-th").getElementsByTagName("th");
+
+    for(var i =0 ; i < frow.length; i ++){
+        $(hrow[i]).css("width", $(frow[i]).width())
+    }
+
+    __$("text").value = "";
+
+    function  cancel(){
+        hidePopup();
+    }
+
+    function display(headerTitle, showSave){
+
+        __$("shield").style.display = "table-cell";
+        __$("popup").style.display = "table-cell";
+        __$("popup-header").innerHTML = headerTitle;
+
+    }
+    function hidePopup(){
+
+        __$("shield").style.display = "none";
+        __$("popup").style.display = "none";
+        __$("popup-header").innerHTML = "";
+        __$("popup-content").innerHTML = "";
+    }
+
+    function search(){
+
+        spin();
+
+        var url = "/order/pull_orders?search_string=" + __$('text').value;
+
+        $.ajax({
+            url: url,
+            success: function(data){
+                var data = JSON.parse(data);
+                $("#rows tr").remove();
+                loadRows(data);
+                removeSpinner();
+            }
+
+        }).fail(function(xhr, status, error){
+            alert(error);
+            removeSpinner();
+        });
+    }
+
+    function loadRows(data){
+
+        var fields = ['pname', 'accession_number', 'sample_type', 'test_types', 'recent_date', 'state', 'recent_doc', '']
+
+        for(var j = 0; j < data.length; j++) {
+
+            var row = document.createElement('tr');
+
+            row.className = 'data-row';
+
+            for (var i = 0; i < fields.length; i++) {
+
+                var td = document.createElement('td');
+
+                if (fields[i] != '') {
+
+                    var str = data[j][fields[i]];
+
+                    if (fields[i] ==  'test_types') {
+
+                        var arr = str.split(',, ');
+
+                        str = arr.filter(function(item, pos){
+
+                            return arr.indexOf(item) == pos;
+
+                        }).join(', ');
+
+                    }else if (fields[i] == "recent_date"){
+
+                        var date = new Date(str);
+
+                        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                        str = date.getDate() + "-" + months[date.getMonth()] + "-" + date.getFullYear();
+
+                    }else if (fields[i] == "recent_doc"){
+
+                        str = str.replace(/\(\d*\)/, '');
+
+                    }
+
+                    td.innerHTML = str;
+
+                }else{
+
+                    td.className = "success-col";
+
+                    var link = document.createElement("a");
+
+                    link.className = "btn btn-success";
+
+                    link.setAttribute("type", "button warning");
+
+                    link.setAttribute("acc_num", data[j]['accession_number']);
+
+                    link.innerHTML = "View Details";
+
+                    link.onclick = function(){
+                        buildEditPopup(this.getAttribute("acc_num"));
+                    }
+
+                    td.appendChild(link);
+                }
+
+                $(td).css("width", $(hrow[i]).width());
+
+                row.appendChild(td);
+
+                __$("rows").appendChild(row);
+
+            }
+        }
+    }
+
+
+    function buildEditPopup(acc_num) {
+
+        if (acc_num)
+            __$("popup").setAttribute("acc_num", acc_num);
+        else
+            __$("popup").removeAttribute("acc_num");
+
+        jQuery.ajax({url: "/order/order_popup?acc_num="+acc_num,
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        display("Order details", true);
+                    }
+                }
+        ).fail(function(xhr, status, error){
+                    alert(error);
+                });
+
+    }
+
+</script>
+</html>

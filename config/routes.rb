@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'orders_search' => 'order#index'
   get 'order/pull_orders'
-
+  get 'order/order_popup'
 
   get 'user/login'
   post 'user/authenticate'

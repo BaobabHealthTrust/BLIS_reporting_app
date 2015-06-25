@@ -27,6 +27,7 @@ default: &default
     user_create_or_edit_link: /blis/htdocs/api/user_create_or_edit.php
     order_server_actions: /blis/htdocs/api/test_type_actions.php    
     order_search_path: /blis/htdocs/api/orders_search.php
+    single_order_search_path: /blis/htdocs/api/orders
 development:
   <<: *default
 
