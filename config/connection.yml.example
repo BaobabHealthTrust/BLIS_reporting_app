@@ -26,6 +26,7 @@ default: &default
     user_management_user_update_path: /update_credentials
     user_create_or_edit_link: /blis/htdocs/api/user_create_or_edit.php
     order_server_actions: /blis/htdocs/api/test_type_actions.php    
+    order_search_path: /blis/htdocs/api/orders_search.php
 development:
   <<: *default
 

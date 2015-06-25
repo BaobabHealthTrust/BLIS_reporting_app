@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   ###### reports end ###########################
 
 
+  get 'orders_search' => 'order#index'
+  get 'order/pull_orders'
+
 
   get 'user/login'
   post 'user/authenticate'

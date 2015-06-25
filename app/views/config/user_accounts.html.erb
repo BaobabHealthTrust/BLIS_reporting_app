@@ -546,17 +546,24 @@
             params[requiredFields[i]] = value;
         }
 
+        if (parseInt(userId) == -1){
+            params['activeStatus'] = -1;
+        }else{
+            params['activeStatus'] = users[userId]['activeStatus'];
+        }
+
         var post_url = 'post_data';
 
         jQuery.ajax({url: post_url,
                     type: "POST",
                     data: params,
                     success: function (response) {
-                        window.location = '/config/user_accounts?title=User Accounts';
+                        console.log(response);
+                        //window.location = '/config/user_accounts?title=User Accounts';
                     }
                 }
         ).fail(function(xhr, status, error){
-                    alert(error)
+                    alert(error);
         });
     }
 </script>
