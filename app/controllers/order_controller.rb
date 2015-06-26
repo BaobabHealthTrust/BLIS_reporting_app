@@ -22,11 +22,11 @@ class OrderController < ApplicationController
 
   def order_popup
 
-    render :text => {}.to_json  if params[:acc_num].blank?
+    render :text => {}.to_json  if params[:spec_id].blank?
 
     @post_url = "#{CONFIG["order_transport_protocol"]}://#{CONFIG["order_username"]}:#{CONFIG["order_password"]}@#{CONFIG["order_server"]}:#{CONFIG["order_port"]}#{CONFIG["single_order_search_path"]}"
 
-    data = RestClient.post(@post_url, {"accession_number" => params[:acc_num]})
+    data = RestClient.post(@post_url, {"specimen_id" => params[:spec_id]})
 
     @data = JSON.parse(data) rescue data
 
