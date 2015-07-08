@@ -1,56 +1,13 @@
 <html>
 <head>
-  <%= javascript_include_tag 'spin' %>
+
   <script>
 
-        var spinner;
+    function __$(id){
 
+        return document.getElementById(id);
 
-        function __$(id){
-
-            return document.getElementById(id);
-
-        }
-
-        function spin() {
-
-            var div = document.createElement("div");
-
-            $(div).css({'position' : "absolute", 'left' : '47%', 'top' : '47%'})
-
-            div.id = "spin";
-
-            document.body.appendChild(div);
-
-            var opts = { lines: 15, length: 10, width: 4, radius: 10, corners: 1, rotate: 0,
-            color: '#000', speed: 2, trail: 60, shadow: false, hwaccel: false,
-            className: 'spinner', zIndex: 2e9,
-            top: 25, left: 25
-            };
-
-            if (__$("text")){
-
-                __$("text").setAttribute("disabled", "disabled");
-
-            }
-
-            spinner = new Spinner(opts).spin(div);
-
-        }
-
-        function removeSpinner(){
-
-            if (__$("text")){
-
-                __$("text").removeAttribute("disabled");
-
-            }
-
-            spinner.stop();
-
-            $("#spin").remove();
-
-        }
+    }
 
   </script>
 
@@ -111,7 +68,7 @@
         width: 30%;
     }
 
-    #shield{
+    #shieldd{
         position: absolute;
         z-index: 2000;
         top: 0px;
@@ -129,7 +86,7 @@
         left: 8%;
         background-color: white;
         width: 80%;
-        height: 80%;
+        height: 73%;
         border: 1px solid black;
         border-radius: 3px;
         z-index: 3000;
@@ -139,7 +96,11 @@
     #popup-header{
         background-color: ghostwhite;
         height: 4%;
-        font-size: 120%;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 11px;
+        vertical-align: middle;
     }
     #content{
         height: 88%;
@@ -201,26 +162,23 @@
 </head>
 <body>
 
-<div id = "popup" style="box-shadow: inset 0 0 4px lightblue, 0 0 0px black !important;">
-  <table style="width:100%; height:100%; padding: 0px; margin: 0%;">
-    <tr >
-      <th id="popup-header">
+<div id = "popup" style='box-shadow: inset 0 0 4px lightblue, 0 0 0px black !important;'>
+
+      <div id='popup-header'>
         Order Summary
-      </th>
-    </tr>
-    <tr>
-      <td id="content">
-        <div id="popup-content">
+      </div>
+
+      <div id='content'>
+        <div id='popup-content'>
 
         </div>
-      </td>
-    </tr>
-    <tr>
-      <td id="popup-footer">
-        <a id="btn-save" style="width:12%; font-size: 16px;" class="btn btn-success pull-right" href="javascript:hidePopup();">Finish</a>
-      </td>
-    </tr>
-  </table>
+      </div>
+
+
+      <div id='popup-footer'>
+        <a id='btn-save' style='width:12%; font-size: 16px;' class='btn btn-success pull-right' href='javascript:hidePopup();'>Finish</a>
+      </div>
+
 </div>
 
   <div id="mainPage" class="page" style='width:95%;'>
@@ -279,7 +237,7 @@
         </table>
     </div>
   </div>
-<div id="shield">
+<div id="shieldd">
 </div>
 
 </body>
@@ -300,8 +258,8 @@
 
     function display(headerTitle){
 
-        __$("shield").style.display = "table-cell";
-        __$('shield').onmousedown = function(){
+        __$("shieldd").style.display = "table-cell";
+        __$('shieldd').onmousedown = function(){
             hidePopup();
         }
         __$("popup").style.display = "table-cell";
@@ -310,15 +268,13 @@
     }
     function hidePopup(){
 
-        __$("shield").style.display = "none";
+        __$("shieldd").style.display = "none";
         __$("popup").style.display = "none";
         __$("popup-header").innerHTML = "";
         __$("popup-content").innerHTML = "";
     }
 
     function search(){
-
-        spin();
 
         var url = "/order/pull_orders?search_string=" + __$('text').value;
 
@@ -328,12 +284,12 @@
                 var data = JSON.parse(data);
                 $("#rows tr").remove();
                 loadRows(data);
-                removeSpinner();
             }
 
         }).fail(function(xhr, status, error){
-            alert(error);
-            removeSpinner();
+
+            console.log(error);
+
         });
     }
 
@@ -415,8 +371,6 @@
 
     function buildEditPopup(spec_id) {
 
-        spin();
-
         if (spec_id)
             __$("popup").setAttribute("spec_id", spec_id);
         else
@@ -452,7 +406,8 @@
                 'width' : '93%',
                 'margin' : 'auto',
                 'margin-top' : '0px',
-                'font-size' : '14px'
+                'font-size' : '14px',
+                'border': '1px dotted lightgray'
             });
 
             __$("popup-content").appendChild(pane);
@@ -552,9 +507,9 @@
 
         $(div).css({
             'width' : '97%',
-            'height' : '65%',
+            'height' : '70%',
             'margin-left' : '19px',
-            'overflow' : 'auto',
+            'overflow-y' : 'auto',
             'font-size' : '14px',
             'margin-top' : '5px'
         });
@@ -575,7 +530,7 @@
 
             row.id = "tr-" + i;
 
-            row.className = (1 % 2 == 0) ? 'even' : 'odd';
+            row.className = (i % 2 == 0) ? 'even' : 'odd';
 
             $(row).css({
                 'width' : '100%'

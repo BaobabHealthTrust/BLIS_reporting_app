@@ -370,6 +370,7 @@
                     }
                 }
         ).fail(function(xhr, status, error){
+                    hideSpinner();
                     alert(error)
         });
     }
@@ -416,6 +417,7 @@
             cell2.style.display = "table-cell";
 
             var value = requiredDefaults[i]
+
             if (userId != -1)
                 var value = users[userId][requiredFields[i]];
 
@@ -438,7 +440,7 @@
             }
 
             if (controlType[i] == 'text') {
-                cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='text' class='form-control' value=" + value + ">"
+                cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='text' class='form-control' value=\"" + value + "\">"
             }else if (controlType[i] == 'password'){
                 cell2.innerHTML = "<input id=\'" + requiredFields[i] + "\' type='password' class='form-control' value='' >"
             }else{
@@ -546,11 +548,7 @@
             params[requiredFields[i]] = value;
         }
 
-        if (parseInt(userId) == -1){
-            params['activeStatus'] = -1;
-        }else{
-            params['activeStatus'] = users[userId]['activeStatus'];
-        }
+        params['activeStatus'] = -1;
 
         var post_url = 'post_data';
 
@@ -559,10 +557,11 @@
                     data: params,
                     success: function (response) {
                         console.log(response);
-                        //window.location = '/config/user_accounts?title=User Accounts';
+                        window.location = '/config/user_accounts?title=User Accounts';
                     }
                 }
         ).fail(function(xhr, status, error){
+                    hideSpinner();
                     alert(error);
         });
     }
