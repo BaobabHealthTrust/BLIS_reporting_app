@@ -3,7 +3,7 @@ default: &default
     order_username: testlab1_admin
     order_password: admin123
     order_server: localhost
-    order_port: 80
+    order_port: 8000
     order_server_login: /blis/htdocs/api/remote_login.php
     order_server_login_check: /blis/htdocs/api/remote_login_check.php
     order_server_logout: /blis/htdocs/api/remote_logout.php?
@@ -15,8 +15,8 @@ default: &default
     order_server_test_type_save: /blis/htdocs/api/test_type_create_or_edit.php
     user_management_protocol: http
     user_management_server: localhost
-    user_management_port: 3009
-    user_management_name: admin
+    user_management_port: 8000
+    user_management_name: testlab1_admin
     user_management_password: password
     user_management_login: /remote_login/
     user_management_logout: /remote_logout/
@@ -28,6 +28,7 @@ default: &default
     order_server_actions: /blis/htdocs/api/test_type_actions.php    
     order_search_path: /blis/htdocs/api/orders_search.php
     single_order_search_path: /blis/htdocs/api/single_orders_search.php
+    order_states: /blis/htdocs/api/get_dashboard_stats.php
 development:
   <<: *default
 
