@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   ###### home ###########################
   #match "home/index" => "home#index", as: :home, via: [:get, :post]
+  get 'home/active_stats'
   ###### home end ###########################
 
   ###### report ###########################
